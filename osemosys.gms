@@ -23,7 +23,8 @@
 $offlisting
 $include osemosys_dec.gms
 * specify Utopia Model data
-$include utopia_data.txt
+*$include utopia_data.txt
+$include utopia_data1.gms
 * define model equations
 $offlisting
 $include osemosys_equ.gms

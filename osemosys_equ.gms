@@ -69,6 +69,7 @@ CBb1_PlannedMaintenance(y,t,r).. sum(l, RateOfTotalActivity(y,l,t,r)*YearSplit(l
 *
 * ##############* Energy Balance A #############
 *
+* #### This first set of equations computes 'fuel' production ####
 *s.t. EBa1_RateOfFuelProduction1(YEAR,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,REGION): RateOfActivity[y,l,t,m,r]*OutputActivityRatio[y,t,f,m,r] = RateOfProductionByTechnologyByMode[y,l,t,m,f,r];
 equation EBa1_RateOfFuelProduction1(YEAR,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,REGION);
 EBa1_RateOfFuelProduction1(y,l,f,t,m,r).. RateOfActivity(y,l,t,m,r)*OutputActivityRatio(r,t,f,m,y) =e= RateOfProductionByTechnologyByMode(y,l,t,m,f,r);
@@ -78,6 +79,8 @@ EBa2_RateOfFuelProduction2(y,l,f,t,r).. sum(m, RateOfProductionByTechnologyByMod
 *s.t. EBa3_RateOfFuelProduction3(YEAR,TIMESLICE,FUEL,REGION): sum(TECHNOLOGY) RateOfProductionByTechnology[y,l,t,f,r] = RateOfProduction[y,l,f,r];
 equation EBa3_RateOfFuelProduction3(YEAR,TIMESLICE,FUEL,REGION);
 EBa3_RateOfFuelProduction3(y,l,f,r).. sum(t, RateOfProductionByTechnology(y,l,t,f,r)) =e= RateOfProduction(y,l,f,r);
+
+* #### This set of equations computes 'fuel' consumption ####
 *s.t. EBa4_RateOfFuelUse1(YEAR,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,REGION): RateOfActivity[y,l,t,m,r]*InputActivityRatio[y,t,f,m,r] = RateOfUseByTechnologyByMode[y,l,t,m,f,r];
 equation EBa4_RateOfFuelUse1(YEAR,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,REGION);
 EBa4_RateOfFuelUse1(y,l,f,t,m,r).. RateOfActivity(y,l,t,m,r)*InputActivityRatio(r,t,f,m,y) =e= RateOfUseByTechnologyByMode(y,l,t,m,f,r);
@@ -87,6 +90,8 @@ EBa5_RateOfFuelUse2(y,l,f,t,r).. sum(m, RateOfUseByTechnologyByMode(y,l,t,m,f,r)
 *s.t. EBa6_RateOfFuelUse3(YEAR,TIMESLICE,FUEL,REGION): sum(TECHNOLOGY) RateOfUseByTechnology[y,l,t,f,r] = RateOfUse[y,l,f,r];
 equation EBa6_RateOfFuelUse3(YEAR,TIMESLICE,FUEL,REGION);
 EBa6_RateOfFuelUse3(y,l,f,r).. sum(t, RateOfUseByTechnology(y,l,t,f,r)) =e= RateOfUse(y,l,f,r);
+
+* #### These equations perform supply and demand balance
 *s.t. EBa7_EnergyBalanceEachTS1(YEAR,TIMESLICE,FUEL,REGION): RateOfProduction[y,l,f,r]*YearSplit[y,l] = Production[y,l,f,r];
 equation EBa7_EnergyBalanceEachTS1(YEAR,TIMESLICE,FUEL,REGION);
 EBa7_EnergyBalanceEachTS1(y,l,f,r).. RateOfProduction(y,l,f,r)*YearSplit(l,y) =e= Production(y,l,f,r);

@@ -1,10 +1,16 @@
 [PROJECT]
 
+[SOLVERS]
+LP=CBC
+
+[RP:OSEMOSYS_DEC]
+1=
+
 [RP:OSEMOSYS_RES]
 1=
 
-[SOLVERS]
-LP=CBC
+[RP:UTOPIA_DATA1]
+1=
 
 [RP:OSEMOSYS]
 1=
@@ -15,7 +21,8 @@ FILE1=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\osemosys.lst
 FILE2=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\osemosys_dec.gms
 FILE3=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\osemosys_equ.gms
 FILE4=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\osemosys_res.gms
-FILE5=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\osemosys_dec.gms
+FILE5=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\utopia_data1.gms
+FILE6=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\osemosys.lst
 MAXIM=0
 TOP=11
 LEFT=27
