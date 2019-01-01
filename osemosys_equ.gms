@@ -289,6 +289,7 @@ E9_ModelPeriodEmissionsLimit(e,r).. ModelPeriodEmissions(e,r) =l= ModelPeriodEmi
 *
 * ##########################################################################################
 *
+$ontext
 TotalCapacityAnnual.FX('1990','TXE',r) = 0;
 TotalCapacityAnnual.FX('1990','RHE',r) = 0;
 TotalCapacityAnnual.FX('1991','RHE',r) = 0;
@@ -300,3 +301,4 @@ TotalCapacityAnnual.FX('1996','RHE',r) = 0;
 TotalCapacityAnnual.FX('1997','RHE',r) = 0;
 TotalCapacityAnnual.FX('1998','RHE',r) = 0;
 TotalCapacityAnnual.FX('1999','RHE',r) = 0;
+$offtext

@@ -6,26 +6,16 @@
 * Files required are:
 * osemosys.gms (this file)
 * osemosys_dec.gms
-* utopia_data.txt
+* itomori_data.gms
 * osemosys_equ.gms
 *
-* To run this GAMS version of OSeMOSYS on your PC:
-* 1. YOU MUST HAVE GAMS VERSION 22.7 OR HIGHER INSTALLED.
-* This is because OSeMOSYS has some parameter, variable and equation names
-* that exceed 31 characters in length, and GAMS versions prior to 22.7 have
-* a limit of 31 characters on the length of such names.
-* 2. Ensure that your PATH contains the GAMS Home Folder.
-* 3. Place all 4 of the above files in a convenient folder,
-* open a Command Prompt window in this folder, and enter:
-* gams osemosys.gms
-* 4. Some results are created in file SelResults.CSV that you can view in Excel.
 *
 * declarations for sets, parameters, variables
 $offlisting
 $include osemosys_dec.gms
-* specify Utopia Model data
-*$include utopia_data.txt
-$include utopia_data1.gms
+* specify Itomori Model data
+*$include itomori_data.gms
+$include itomori_data.gms
 * define model equations
 $offlisting
 $include osemosys_equ.gms

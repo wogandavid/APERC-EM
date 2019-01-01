@@ -1,8 +1,6 @@
-* OSEMOSYS_DEC.GMS - declarations for sets, parameters, variables (but not equations)
-*
 * OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
 * 
-* Trade additions by David Wogan, APERC - December 2018
+* Trade additions by David Wogan, APERC - Jan 2019
 *
 * OSEMOSYS 2011.07.07
 * Open Source energy Modeling SYStem
