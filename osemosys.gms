@@ -1,6 +1,8 @@
 *
 * OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
 *
+* APERC Energy Model 2019.01.01 created by David Wogan, APERC
+*
 * Files required are:
 * osemosys.gms (this file)
 * osemosys_dec.gms
@@ -16,8 +18,7 @@
 * 3. Place all 4 of the above files in a convenient folder,
 * open a Command Prompt window in this folder, and enter:
 * gams osemosys.gms
-* 4. You should find that you get an optimal value of 26630.2254.
-* 5. Some results are created in file SelResults.CSV that you can view in Excel.
+* 4. Some results are created in file SelResults.CSV that you can view in Excel.
 *
 * declarations for sets, parameters, variables
 $offlisting
