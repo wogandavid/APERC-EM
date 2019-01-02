@@ -1,63 +1,65 @@
 
---- Job osemosys.gms Start 12/14/18 17:29:19 24.3.3 r48116 WEX-WEI x86 64bit/MS Windows
-GAMS 24.3.3   Copyright (C) 1987-2014 GAMS Development. All rights reserved
-Licensee: Takashi Otsuki, 5 user license                 R131024:0515CO-WIN
-          Asia Pacific Energy Research Centre (APERC)               DC10622
+--- Job osemosys.gms Start 01/02/19 00:02:31 25.1.3 r4e34d435fbd WEX-WEI x86 64bit/MS Windows
+GAMS 25.1.3   Copyright (C) 1987-2018 GAMS Development. All rights reserved
+Licensee: Large MUD - 20 User License                    G180625:0000CO-GEN
+          King Abdullah Petroleum Studies & Research Center, InformaDC10216
+          License Admin: B. Ramanathan, badrinath.ramanathan@kapsarc.org   
 --- Starting compilation
---- osemosys.gms(24) 2 Mb
---- .osemosys_dec.gms(202) 2 Mb
---- osemosys.gms(27) 2 Mb
---- .utopia_data1.gms(2616) 3 Mb
---- osemosys.gms(30) 3 Mb
---- .osemosys_equ.gms(302) 3 Mb
---- osemosys.gms(36) 3 Mb
---- .osemosys_res.gms(89) 3 Mb
---- osemosys.gms(36) 3 Mb
---- Starting execution: elapsed 0:00:00.010
---- osemosys.gms(3153) 4 Mb
+--- osemosys.gms(15) 2 Mb
+--- . osemosys_dec.gms(202) 2 Mb
+--- osemosys.gms(18) 2 Mb
+--- . itomori_data1.gms(169) 3 Mb
+--- call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx @task1.txt
+
+GDXXRW           25.1.3 r4e34d435fbd Released Oct 30, 2018 VS8 x86 32bit/MS Wi
+Input file : C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx
+Output file: C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.gdx
+Total time = 1735 Ms
+--- . itomori_data1.gms(352) 3 Mb
+--- osemosys.gms(21) 3 Mb
+--- . osemosys_equ.gms(304) 3 Mb
+--- osemosys.gms(27) 3 Mb
+--- . osemosys_res.gms(89) 3 Mb
+--- osemosys.gms(27) 3 Mb
+--- Starting execution: elapsed 0:00:01.807
+--- osemosys.gms(390) 4 Mb
+--- GDXin=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.gdx
+--- osemosys.gms(882) 4 Mb
 --- Generating LP model osemosys
---- osemosys.gms(3154) 89 Mb
----   291,277 rows  293,774 columns  656,926 non-zeroes
---- Executing CBC: elapsed 0:00:00.964
+--- osemosys.gms(883) 43 Mb
+---   135,775 rows  136,886 columns  305,350 non-zeroes
+--- Executing CBC: elapsed 0:00:02.253
 
-COIN-OR CBC      24.3.3 r48116 Released Sep 19, 2014 WEI x86 64bit/MS Windows 
+COIN-OR CBC      25.1.3 r4e34d435fbd Released Oct 30, 2018 WEI x86 64bit/MS Wi
 
-COIN-OR Branch and Cut (CBC Library 2.8)
+COIN-OR Branch and Cut (CBC Library 2.9)
 written by J. Forrest
-Space for names approximately 32.81 MB.
+Space for names approximately 16.14 MB.
 Use statement '<modelname>.dictfile=0;' to turn dictionary off.
 
 Calling CBC main solution routine...
-0  Obj 1423.1869 Primal inf 196765.82 (286)
-123  Obj 3977.7385 Primal inf 44689.91 (297)
-246  Obj 6805.99 Primal inf 886900.92 (320)
-369  Obj 7878.7391 Primal inf 45747.955 (403)
-492  Obj 8723.4861 Primal inf 31536.214 (447)
-615  Obj 9699.9214 Primal inf 23700.472 (475)
-738  Obj 17312.307 Primal inf 8152.33 (425)
-861  Obj 21896.112 Primal inf 4672.435 (373)
-984  Obj 24113.671 Primal inf 4995.639 (376)
-1107  Obj 24499.149 Primal inf 3657.4352 (378)
-1230  Obj 24633.161 Primal inf 3171.5042 (382)
-1353  Obj 25308.171 Primal inf 57950.122 (370)
-1476  Obj 26296.899 Primal inf 5351.7897 (301)
-1599  Obj 26578.155 Primal inf 1826.9225 (186)
-1722  Obj 26629.363 Primal inf 11.767731 (53)
-1786  Obj 26630.225
-Optimal - objective value 26630.225
-0  Obj 26630.225
-Perturbing problem by 0.0001 % of 0.1 - largest nonzero change 3.4940407e-007 (% 3.4940407e-005) - largest zero change 3.4999985e-007
-0  Obj 26630.225
-Optimal - objective value 26630.225
-Optimal objective 26630.22538 - 1786 iterations time 0.842, Presolve 0.42
+0  Obj 874.6589 Primal inf 9662.323 (174) Dual inf 0.38644331 (36)
+97  Obj 313593.16 Primal inf 12002.723 (197)
+194  Obj 526891.1 Primal inf 15458.703 (306)
+291  Obj 664622.66 Primal inf 9431.434 (354)
+388  Obj 724701.11 Primal inf 5659.818 (379)
+485  Obj 744632.31 Primal inf 19130.758 (396)
+582  Obj 769121.88 Primal inf 3477.5628 (363)
+679  Obj 792761.93 Primal inf 1201.777 (250)
+776  Obj 801282.39 Primal inf 15.578238 (69)
+873  Obj 801375.78 Primal inf 1.7670061 (61)
+948  Obj 801376.01
+Optimal - objective value 801376.01
+Optimal - objective value 801376.01
+Optimal objective 801376.0082 - 948 iterations time 0.282, Presolve 0.20
 
 Solved to optimality.
 --- Restarting execution
---- osemosys.gms(3154) 35 Mb
+--- osemosys.gms(883) 18 Mb
 --- Reading solution for model osemosys
---- osemosys.gms(3154) 62 Mb
---- Executing after solve: elapsed 0:00:05.471
---- osemosys.gms(3245) 64 Mb
---- Putfile ANT C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\SelResults.CSV
+--- osemosys.gms(883) 31 Mb
+--- Executing after solve: elapsed 0:00:04.206
+--- osemosys.gms(974) 31 Mb
+--- Putfile ANT C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\SelResults.CSV
 *** Status: Normal completion
---- Job osemosys.gms Stop 12/14/18 17:29:25 elapsed 0:00:05.492
+--- Job osemosys.gms Stop 01/02/19 00:02:36 elapsed 0:00:04.218

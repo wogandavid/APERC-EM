@@ -1,0 +1,11 @@
+*.gpr
+*.lst
+*.lxi
+*.~gm
+*.xlsx
+*.par
+*.dat
+*.cmd
+*.~op
+*.log
+*.gdx

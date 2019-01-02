@@ -15,7 +15,7 @@ $offlisting
 $include osemosys_dec.gms
 * specify Itomori Model data
 *$include itomori_data.gms
-$include itomori_data.gms
+$include itomori_data1.gms
 * define model equations
 $offlisting
 $include osemosys_equ.gms

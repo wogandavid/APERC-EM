@@ -139,8 +139,29 @@ parameter YearSplit(TIMESLICE,YEAR) fraction of year in each timeslice;
   YearSplit('WN',y) = .1667;
 *display YearSplit;
 
-* uncomment when TRN demand is introduced:
+* define parameters then call data from Excel
+parameter AccumulatedAnnualDemand(ECONOMY,FUEL,YEAR);
+parameter SpecifiedAnnualDemand(ECONOMY,FUEL,YEAR);
+parameter CapitalCost(ECONOMY,TECHNOLOGY,YEAR);
+parameter VariableCost(ECONOMY,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
+parameter ResidualCapacity(ECONOMY,TECHNOLOGY,YEAR);
 
+$onecho > task1.txt
+par=AccumulatedAnnualDemand rng=AccumulatedAnnualDemand!A2:D7 Rdim=3
+par=SpecifiedAnnualDemand rng=SpecifiedAnnualDemand!A2:D27 Rdim=3
+par=CapitalCost rng=CapitalCost!A2:D105 Rdim=3
+par=VariableCost rng=VariableCost!A2:E118 Rdim=4
+par=ResidualCapacity rng=ResidualCapacity!A2:D92 Rdim=3
+$offecho
+
+$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx @task1.txt
+execute_load "ITOMORI_data.gdx", 
+  AccumulatedAnnualDemand, SpecifiedAnnualDemand, CapitalCost, VariableCost,ResidualCapacity
+  ;
+
+* END OF EXCEL CALLS
+
+$ontext
 parameter AccumulatedAnnualDemand /
   ITOMORI.RH.2018      0.124202666
   ITOMORI.RH.2019      0.13040986
@@ -169,46 +190,40 @@ $ontext
   ITOMORI.TRN.2028      0.1862998
   ITOMORI.TRN.2029      0.195590905
   ITOMORI.TRN.2030      0.20488201
-  ITOMORI.TRN.2003      0.214173116
-  ITOMORI.TRN.2004      0.223464221
-  ITOMORI.TRN.2005      0.232755327
-  ITOMORI.TRN.2006      0.242046432
-  ITOMORI.TRN.2007      0.251337537
-  ITOMORI.TRN.2008      0.260628643
-  ITOMORI.TRN.2009      0.269919748
-  ITOMORI.TRN.2010      0.279210854
-$offtext
 /;
+$offtext
 *display AccumulatedAnnualDemand;
 
+$ontext
 parameter SpecifiedAnnualDemand/
-ITOMORI .       RH      .       2018            50
-ITOMORI .       RH      .       2019            55
-ITOMORI .       RH      .       2020            60.5
-ITOMORI .       RH      .       2021            66.55
-ITOMORI .       RH      .       2022            73.205
-ITOMORI .       RH      .       2023            80.5255
-ITOMORI .       RH      .       2024            88.57805
-ITOMORI .       RH      .       2025            97.435855
-ITOMORI .       RH      .       2026            107.1794405
-ITOMORI .       RH      .       2027            117.8973846
-ITOMORI .       RH      .       2028            129.687123
-ITOMORI .       RH      .       2029            142.6558353
-ITOMORI .       RH      .       2030            156.9214188
-ITOMORI .       RL      .       2018            50
-ITOMORI .       RL      .       2019            52.5
-ITOMORI .       RL      .       2020            55.125
-ITOMORI .       RL      .       2021            57.88125
-ITOMORI .       RL      .       2022            60.7753125
-ITOMORI .       RL      .       2023            63.81407813
-ITOMORI .       RL      .       2024            67.00478203
-ITOMORI .       RL      .       2025            70.35502113
-ITOMORI .       RL      .       2026            73.87277219
-ITOMORI .       RL      .       2027            77.5664108
-ITOMORI .       RL      .       2028            81.44473134
-ITOMORI .       RL      .       2029            85.51696791
-ITOMORI .       RL      .       2030            89.7928163
+  ITOMORI .       RH      .       2018            50
+  ITOMORI .       RH      .       2019            55
+  ITOMORI .       RH      .       2020            60.5
+  ITOMORI .       RH      .       2021            66.55
+  ITOMORI .       RH      .       2022            73.205
+  ITOMORI .       RH      .       2023            80.5255
+  ITOMORI .       RH      .       2024            88.57805
+  ITOMORI .       RH      .       2025            97.435855
+  ITOMORI .       RH      .       2026            107.1794405
+  ITOMORI .       RH      .       2027            117.8973846
+  ITOMORI .       RH      .       2028            129.687123
+  ITOMORI .       RH      .       2029            142.6558353
+  ITOMORI .       RH      .       2030            156.9214188
+  ITOMORI .       RL      .       2018            50
+  ITOMORI .       RL      .       2019            52.5
+  ITOMORI .       RL      .       2020            55.125
+  ITOMORI .       RL      .       2021            57.88125
+  ITOMORI .       RL      .       2022            60.7753125
+  ITOMORI .       RL      .       2023            63.81407813
+  ITOMORI .       RL      .       2024            67.00478203
+  ITOMORI .       RL      .       2025            70.35502113
+  ITOMORI .       RL      .       2026            73.87277219
+  ITOMORI .       RL      .       2027            77.5664108
+  ITOMORI .       RL      .       2028            81.44473134
+  ITOMORI .       RL      .       2029            85.51696791
+  ITOMORI .       RL      .       2030            89.7928163
 /;
+$offtext
 *display SpecifiedAnnualDemand;
 
 parameter SpecifiedDemandProfile(ECONOMY,FUEL,TIMESLICE,YEAR);
@@ -299,6 +314,8 @@ parameter fixedCost(ECONOMY,TECHNOLOGY,YEAR);
 
 *display fixedCost;
 
+
+$ontext
 parameter CapitalCost /
   ITOMORI.ELCOAL.2018  1400
   ITOMORI.ELCOAL.2019  1390
@@ -470,8 +487,11 @@ $ontext
   ITOMORI.TRNU.2028       0
   ITOMORI.TRNU.2029       0
   ITOMORI.TRNU.2030       0
-$offtext
+
 /;
+$offtext
+
+$ontext
 parameter VariableCost /
   ITOMORI.ELCOAL.1.2018     0.007165377
   ITOMORI.ELCOAL.1.2019     0.007165377
@@ -617,13 +637,15 @@ $ontext
   ITOMORI.TRNU.1.2028     2388.435085
   ITOMORI.TRNU.1.2029     2388.435085
   ITOMORI.TRNU.1.2030     2388.435085
-$offtext
+
 /;
+$offtext
 
 *VariableCost(r,t,m,y)$(VariableCost(r,t,m,y) = 0) = 0.00001;
 VariableCost(r,t,m,y)$(VariableCost(r,t,m,y) = 0) = 0.00041868;
 *display VariableCost;
 
+$ontext
 parameter ResidualCapacity /
   ITOMORI.ELCOAL.2018       0.5
   ITOMORI.ELCOAL.2019       0.5
@@ -743,8 +765,9 @@ $ontext
   ITOMORI.TRNG.2028     0.057323015
   ITOMORI.TRNG.2029     0.052068406
   ITOMORI.TRNG.2030     0.046813796
-$offtext
+
 /;
+$offtext
 *display ResidualCapacity;
 
 parameter SalvageFactor /
