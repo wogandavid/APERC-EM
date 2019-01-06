@@ -1,8 +1,5 @@
 [PROJECT]
 
-[SOLVERS]
-LP=CBC
-
 [RP:OSEMOSYS_DEC]
 1=
 
@@ -17,9 +14,6 @@ SqTrail0=0
 Order=1,2
 Decim=7
 PlaneRownr=-1
-
-[RP:IO_TEST]
-1=
 
 [RP:OSEMOSYS_EQU]
 1=
@@ -63,9 +57,6 @@ Order=1
 Decim=7
 PlaneRownr=-1
 
-[RP:ITOMORI_DATA]
-1=
-
 [GDXDISP: ResidualCapacity Par 4]
 PlaneDim=0
 RowDim=4
@@ -81,20 +72,33 @@ PlaneRownr=-1
 [RP:OSEMOSYS]
 1=
 
+[SOLVERS]
+LP=CBC
+MCP=PATH
+
+[RP:ITOMORI_DATA]
+1=
+
+[RP:0_OSEMOSYS]
+1=
+
+[RP:IO_TEST]
+1=
+
 [MRUFILES]
-1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data1.gms
-2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.gdx
-3=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data.gms
+1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data.gms
+2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data1.gms
+3=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.gdx
 4=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\osemosys_res.gms
 5=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\osemosys_equ.gms
 6=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data.lst
-7=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.lst
-8=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.gms
 
 [OPENWINDOW_1]
-FILE0=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\osemosys.gms
-FILE1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\osemosys.lst
-FILE2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\osemosys.lst
+FILE0=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\0_osemosys.gms
+FILE1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\0_osemosys.lst
+FILE2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.gms
+FILE3=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.lst
+FILE4=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.gms
 MAXIM=0
 TOP=5
 LEFT=14

@@ -63,18 +63,17 @@ $offtext
 $offlisting
 set EMISSION  / CO2, NOX /;
 set TECHNOLOGY / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1, 
-  RIV, RHO, RHE, RL1, RHu, RLu /;
+  RIV, RHO, RHE, RL1, RHu, RLu, SRE, TRND, TRNE, TRNG, TRNu /;
 * set     TECHNOLOGY      / ELCOAL, ELNUKE, ELHYD, ELDAM, E70, IMPDSL1, IMPGSL1, IMPCOAL1, IMPOIL1, IMPURANIUM1, RHE, RHO, RL1, SRE, TRND, TRNE, TRNG, RIV, RHu, RLu, TRNu/;
 
 set FUEL / URANIUM, COAL, OIL, NATGAS, HYD, ELC, DSL, GSL, RH, RL, TRN /;
-* set     FUEL    /TRN/;
 
 * SECTORAL sets:
 set ELECTRICITY(TECHNOLOGY)   / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM /;
 set SUPPLY(TECHNOLOGY)        / IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1 /;
 set RESIDENTIAL(TECHNOLOGY)   / RHO, RHE, RL1, RHu, RLu /;
-* set     REFINING(TECHNOLOGY)      / SRE/;
-* set     TRANSPORT(TECHNOLOGY)     / TRND, TRNE, TRNG, TRNu/;
+set REFINING(TECHNOLOGY)      / SRE /;
+set TRANSPORT(TECHNOLOGY)     / TRND, TRNE, TRNG, TRNu/;
 
 set YEAR /2018*2030/;
 YearVal(YEAR) = 2018+ord(YEAR)-1;
@@ -130,99 +129,16 @@ parameter TechnologyFromStorage /
 /;
 *display TechnologyFromStorage;
 
-parameter YearSplit /
-  ID.2018  .1667
-  ID.2019  .1667
-  ID.2020  .1667
-  ID.2021  .1667
-  ID.2022  .1667
-  ID.2023  .1667
-  ID.2024  .1667
-  ID.2025  .1667
-  ID.2026  .1667
-  ID.2027  .1667
-  ID.2028  .1667
-  ID.2029  .1667
-  ID.2030  .1667
-  IN.2018  .0833
-  IN.2019  .0833
-  IN.2020  .0833
-  IN.2021  .0833
-  IN.2022  .0833
-  IN.2023  .0833
-  IN.2024  .0833
-  IN.2025  .0833
-  IN.2026  .0833
-  IN.2027  .0833
-  IN.2028  .0833
-  IN.2029  .0833
-  IN.2030  .0833
-  SD.2018  .1667
-  SD.2019  .1667
-  SD.2020  .1667
-  SD.2021  .1667
-  SD.2022  .1667
-  SD.2023  .1667
-  SD.2024  .1667
-  SD.2025  .1667
-  SD.2026  .1667
-  SD.2027  .1667
-  SD.2028  .1667
-  SD.2029  .1667
-  SD.2030  .1667
-  SN.2018  .0833
-  SN.2019  .0833
-  SN.2020  .0833
-  SN.2021  .0833
-  SN.2022  .0833
-  SN.2023  .0833
-  SN.2024  .0833
-  SN.2025  .0833
-  SN.2026  .0833
-  SN.2027  .0833
-  SN.2028  .0833
-  SN.2029  .0833
-  SN.2030  .0833
-  WD.2018  .3333
-  WD.2019  .3333
-  WD.2020  .3333
-  WD.2021  .3333
-  WD.2022  .3333
-  WD.2023  .3333
-  WD.2024  .3333
-  WD.2025  .3333
-  WD.2026  .3333
-  WD.2027  .3333
-  WD.2028  .3333
-  WD.2029  .3333
-  WD.2030  .3333
-  WN.2018  .1667
-  WN.2019  .1667
-  WN.2020  .1667
-  WN.2021  .1667
-  WN.2022  .1667
-  WN.2023  .1667
-  WN.2024  .1667
-  WN.2025  .1667
-  WN.2026  .1667
-  WN.2027  .1667
-  WN.2028  .1667
-  WN.2029  .1667
-  WN.2030  .1667
-/;
-*option YearSplit:4:1:1; display YearSplit;
-
-* BEGING EXCEL CALLS
+* ## BEGIN EXCEL CALLS
 
 $onecho > task1.txt
+  par=YearSplit rng=YearSplit!A2:C79 Rdim=2
   par=AccumulatedAnnualDemand rng=AccumulatedAnnualDemand!A2:D14 Rdim=3
   par=SpecifiedDemandProfile rng=SpecifiedDemandProfile!A2:E157 Rdim=4
   par=SpecifiedAnnualDemand rng=SpecifiedAnnualDemand!A2:D27 Rdim=3
-
   par=InputActivityRatio rng=InputActivityRatio!A2:F105 Rdim=5
   par=OutputActivityRatio rng=OutputActivityRatio!A2:F222 Rdim=5
   par=FixedCost rng=FixedCost!A2:D92 Rdim=3
-
   par=CapitalCost rng=CapitalCost!A2:D118 Rdim=3
   par=VariableCost rng=VariableCost!A2:E131 Rdim=4
   par=ResidualCapacity rng=ResidualCapacity!A2:D92 Rdim=3
@@ -238,6 +154,7 @@ $offecho
 
 $call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx @task1.txt
 execute_load "ITOMORI_data.gdx", 
+  YearSplit
   AccumulatedAnnualDemand
   SpecifiedAnnualDemand
   SpecifiedDemandProfile
@@ -256,7 +173,9 @@ execute_load "ITOMORI_data.gdx",
   TotalAnnualMinCapacity
   OperationalLife
 ;
-* END OF EXCEL CALLS
+* ## END OF EXCEL CALLS
+
+*option YearSplit:4:1:1; display YearSplit;
 
 *option SpecifiedDemandProfile:4:2:2; display SpecifiedDemandProfile;
 
@@ -337,6 +256,7 @@ OperationalLife(r,t)$(OperationalLife(r,t) = 0) = 1;
 
 TotalAnnualMaxCapacity(r,t,y)$(TotalAnnualMaxCapacity(r,t,y) = 0) = 99999;
 *display TotalAnnualMaxCapacity;
+
 *display TotalAnnualMinCapacity;
 
 TotalAnnualMaxCapacityInvestment(r,t,y) = 99999;
