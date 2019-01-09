@@ -66,7 +66,7 @@ set TECHNOLOGY / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, IMPCOAL1, IMPOIL1, IMPN
   RIV, RHO, RHE, RL1, RHu, RLu, SRE, TRND, TRNE, TRNG, TRNu /;
 * set     TECHNOLOGY      / ELCOAL, ELNUKE, ELHYD, ELDAM, E70, IMPDSL1, IMPGSL1, IMPCOAL1, IMPOIL1, IMPURANIUM1, RHE, RHO, RL1, SRE, TRND, TRNE, TRNG, RIV, RHu, RLu, TRNu/;
 
-set FUEL / URANIUM, COAL, OIL, NATGAS, HYD, ELC, DSL, GSL, RH, RL, TRN /;
+set FUEL / URANIUM, COAL, OIL, NATGAS, HYD, ELC, TRADEDELC, DSL, GSL, RH, RL, TRN /;
 
 * SECTORAL sets:
 set ELECTRICITY(TECHNOLOGY)   / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM /;
@@ -80,7 +80,7 @@ YearVal(YEAR) = 2018+ord(YEAR)-1;
 
 set TIMESLICE       / ID, IN, SD, SN, WD, WN /;
 set MODE_OF_OPERATION       / 1, 2 /;
-set ECONOMY  / ITOMORI /;
+set ECONOMY  / ITOMORI, TOKYO3 /;
 set STORAGE / DAM /;
 set BOUNDARY_INSTANCES  / endc1 /;
 $offlisting
@@ -132,24 +132,24 @@ parameter TechnologyFromStorage /
 * ## BEGIN EXCEL CALLS
 
 $onecho > task1.txt
-  par=YearSplit rng=YearSplit!A2:C79 Rdim=2
-  par=AccumulatedAnnualDemand rng=AccumulatedAnnualDemand!A2:D14 Rdim=3
-  par=SpecifiedDemandProfile rng=SpecifiedDemandProfile!A2:E157 Rdim=4
-  par=SpecifiedAnnualDemand rng=SpecifiedAnnualDemand!A2:D27 Rdim=3
-  par=InputActivityRatio rng=InputActivityRatio!A2:F105 Rdim=5
-  par=OutputActivityRatio rng=OutputActivityRatio!A2:F222 Rdim=5
-  par=FixedCost rng=FixedCost!A2:D92 Rdim=3
-  par=CapitalCost rng=CapitalCost!A2:D118 Rdim=3
-  par=VariableCost rng=VariableCost!A2:E131 Rdim=4
-  par=ResidualCapacity rng=ResidualCapacity!A2:D92 Rdim=3
-  par=SalvageFactor rng=SalvageFactor!A2:D105 Rdim=3
-  par=AvailabilityFactor rng=AvailabilityFactor!A2:D40 Rdim=3
-  par=CapacityFactor rng=CapacityFactor!A2:D66 Rdim=3
-  par=EmissionActivityRatio rng=EmissionActivityRatio!A2:D66 Rdim=5
-  par=ReserveMarginTagTechnology rng=ReserveMarginTagTechnology!A2:D66 Rdim=3
-  par=TotalAnnualMaxCapacity rng=TotalAnnualMaxCapacity!A2:D40 Rdim=3
-  par=TotalAnnualMinCapacity rng=TotalAnnualMinCapacity!A2:D14 Rdim=3
-  par=OperationalLife rng=OperationalLife!A2:C8 Rdim=2
+  par=YearSplit rng=YearSplit! Rdim=2
+  par=AccumulatedAnnualDemand rng=AccumulatedAnnualDemand! Rdim=3
+  par=SpecifiedDemandProfile rng=SpecifiedDemandProfile! Rdim=4
+  par=SpecifiedAnnualDemand rng=SpecifiedAnnualDemand! Rdim=3
+  par=InputActivityRatio rng=InputActivityRatio! Rdim=5
+  par=OutputActivityRatio rng=OutputActivityRatio! Rdim=5
+  par=FixedCost rng=FixedCost! Rdim=3
+  par=CapitalCost rng=CapitalCost! Rdim=3
+  par=VariableCost rng=VariableCost! Rdim=4
+  par=ResidualCapacity rng=ResidualCapacity! Rdim=3
+  par=SalvageFactor rng=SalvageFactor! Rdim=3
+  par=AvailabilityFactor rng=AvailabilityFactor! Rdim=3
+  par=CapacityFactor rng=CapacityFactor! Rdim=3
+  par=EmissionActivityRatio rng=EmissionActivityRatio! Rdim=5
+  par=ReserveMarginTagTechnology rng=ReserveMarginTagTechnology Rdim=3
+  par=TotalAnnualMaxCapacity rng=TotalAnnualMaxCapacity! Rdim=3
+  par=TotalAnnualMinCapacity rng=TotalAnnualMinCapacity! Rdim=3
+  par=OperationalLife rng=OperationalLife! Rdim=2
 $offecho
 
 $call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx @task1.txt
@@ -201,6 +201,7 @@ parameter CapacityToActivityUnit /
   ITOMORI.ELNATGAS  0.753224421
   ITOMORI.ELHYD     0.753224421
   ITOMORI.ELDAM     0.753224421
+  TOKYO3.ELCOAL     0.753224421
 /;
 CapacityToActivityUnit(r,t)$(CapacityToActivityUnit(r,t) = 0) = 1;
 *display CapacityToActivityUnit;
@@ -211,6 +212,7 @@ parameter TechWithCapacityNeededToMeetPeakTS /
   ITOMORI.ELNATGAS  1
   ITOMORI.ELHYD     1
   ITOMORI.ELDAM     1
+  TOKYO3.ELCOAL      1
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 
@@ -231,6 +233,19 @@ parameter ReserveMarginTagFuel /
   ITOMORI.ELC.2028  1
   ITOMORI.ELC.2029  1
   ITOMORI.ELC.2030  1
+  TOKYO3.ELC.2018  1
+  TOKYO3.ELC.2019  1
+  TOKYO3.ELC.2020  1
+  TOKYO3.ELC.2021  1
+  TOKYO3.ELC.2022  1
+  TOKYO3.ELC.2023  1
+  TOKYO3.ELC.2024  1
+  TOKYO3.ELC.2025  1
+  TOKYO3.ELC.2026  1
+  TOKYO3.ELC.2027  1
+  TOKYO3.ELC.2028  1
+  TOKYO3.ELC.2029  1
+  TOKYO3.ELC.2030  1
 /;
 *display ReserveMarginTagFuel;
 
@@ -248,9 +263,37 @@ parameter ReserveMargin /
   ITOMORI.2028  1.18
   ITOMORI.2029  1.18
   ITOMORI.2030  1.18
+  TOKYO3.2018  1.18
+  TOKYO3.2019  1.18
+  TOKYO3.2020  1.18
+  TOKYO3.2021  1.18
+  TOKYO3.2022  1.18
+  TOKYO3.2023  1.18
+  TOKYO3.2024  1.18
+  TOKYO3.2025  1.18
+  TOKYO3.2026  1.18
+  TOKYO3.2027  1.18
+  TOKYO3.2028  1.18
+  TOKYO3.2029  1.18
+  TOKYO3.2030  1.18
 /;
 *display ReserveMargin;
 
+parameter TradeRoute /
+  ITOMORI.TOKYO3.TRADEDELC.2018 0
+  ITOMORI.TOKYO3.TRADEDELC.2019 0
+  ITOMORI.TOKYO3.TRADEDELC.2020 0
+  ITOMORI.TOKYO3.TRADEDELC.2021 0
+  ITOMORI.TOKYO3.TRADEDELC.2022 0
+  ITOMORI.TOKYO3.TRADEDELC.2023 0
+  ITOMORI.TOKYO3.TRADEDELC.2024 0
+  ITOMORI.TOKYO3.TRADEDELC.2025 0
+  ITOMORI.TOKYO3.TRADEDELC.2026 0
+  ITOMORI.TOKYO3.TRADEDELC.2027 0
+  ITOMORI.TOKYO3.TRADEDELC.2028 0
+  ITOMORI.TOKYO3.TRADEDELC.2029 0
+  ITOMORI.TOKYO3.TRADEDELC.2030 0
+/;
 OperationalLife(r,t)$(OperationalLife(r,t) = 0) = 1;
 *display OperationalLife;
 

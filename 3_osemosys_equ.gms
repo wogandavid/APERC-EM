@@ -101,9 +101,12 @@ EBa8_EnergyBalanceEachTS2(y,l,f,r).. RateOfUse(y,l,f,r)*YearSplit(l,y) =e= Use(y
 *s.t. EBa9_EnergyBalanceEachTS3(YEAR,TIMESLICE,FUEL,ECONOMY): RateOfDemand[y,l,f,r]*YearSplit[y,l] = Demand[y,l,f,r];
 equation EBa9_EnergyBalanceEachTS3(YEAR,TIMESLICE,FUEL,ECONOMY);
 EBa9_EnergyBalanceEachTS3(y,l,f,r).. RateOfDemand(y,l,f,r)*YearSplit(l,y) =e= Demand(y,l,f,r);
-*s.t. EBa10_EnergyBalanceEachTS4(YEAR,TIMESLICE,FUEL,ECONOMY): Production[y,l,f,r] >= Demand[y,l,f,r] + Use[y,l,f,r];
-equation EBa10_EnergyBalanceEachTS4(YEAR,TIMESLICE,FUEL,ECONOMY);
-EBa10_EnergyBalanceEachTS4(y,l,f,r).. Production(y,l,f,r) =g= Demand(y,l,f,r) + Use(y,l,f,r);
+* s.t. EBa10_EnergyBalanceEachTS4{r in REGION, rr in REGION, l in TIMESLICE, f in FUEL, y in YEAR}: Trade[r,rr,l,f,y] = -Trade[rr,r,l,f,y];
+equation EBa10_EnergyBalanceEachTS4(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR);
+EBa10_EnergyBalanceEachTS4(r,rr,l,f,y).. Trade(r,rr,l,f,y) =e= -Trade(rr,r,l,f,y);
+*s.t. EBa11_EnergyBalanceEachTS5(YEAR,TIMESLICE,FUEL,ECONOMY): Production[r,l,f,y] >= Demand[r,l,f,y] + Use[r,l,f,y] + sum{rr in REGION} Trade[r,rr,l,f,y]*TradeRoute[r,rr,f,y];
+equation EBa11_EnergyBalanceEachTS5(YEAR,TIMESLICE,FUEL,ECONOMY);
+EBa11_EnergyBalanceEachTS5(y,l,f,r).. Production(y,l,f,r) =g= Demand(y,l,f,r) + Use(y,l,f,r) + sum(rr,Trade(r,rr,l,f,y)*TradeRoute(r,rr,f,y));
 *
 * ##############* Energy Balance B #############
 *
@@ -113,9 +116,12 @@ EBb1_EnergyBalanceEachYear1(y,f,r).. sum(l, Production(y,l,f,r)) =e= ProductionA
 *s.t. EBb2_EnergyBalanceEachYear2(YEAR,FUEL,ECONOMY): sum(TIMESLICE) Use[y,l,f,r] = UseAnnual[y,f,r];
 equation EBb2_EnergyBalanceEachYear2(YEAR,FUEL,ECONOMY);
 EBb2_EnergyBalanceEachYear2(y,f,r).. sum(l, Use(y,l,f,r)) =e= UseAnnual(y,f,r);
-*s.t. EBb3_EnergyBalanceEachYear3(YEAR,FUEL,ECONOMY): ProductionAnnual[y,f,r] >= UseAnnual[y,f,r] + AccumulatedAnnualDemand[y,f,r];
-equation EBb3_EnergyBalanceEachYear3(YEAR,FUEL,ECONOMY);
-EBb3_EnergyBalanceEachYear3(y,f,r).. ProductionAnnual(y,f,r) =g= UseAnnual(y,f,r) + AccumulatedAnnualDemand(r,f,y);
+*s.t. EBb3_EnergyBalanceEachYear3{r in REGION, rr in REGION, f in FUEL, y in YEAR}: sum{l in TIMESLICE} Trade[r,rr,l,f,y] = TradeAnnual[r,rr,f,y];
+equation EBb3_EnergyBalanceEachYear3(ECONOMY,ECONOMY2,FUEL,YEAR);
+EBb3_EnergyBalanceEachYear3(r,rr,f,y).. sum(l,Trade(r,rr,l,f,y)) =e= TradeAnnual(r,rr,f,y);
+*s.t. EBb4_EnergyBalanceEachYear4{r in REGION, f in FUEL, y in YEAR}: ProductionAnnual[r,f,y] >= UseAnnual[r,f,y] + sum{rr in REGION} TradeAnnual[r,rr,f,y]*TradeRoute[r,rr,f,y] + AccumulatedAnnualDemand[r,f,y];
+equation EBb4_EnergyBalanceEachYear4(YEAR,FUEL,ECONOMY);
+EBb4_EnergyBalanceEachYear4(y,f,r).. ProductionAnnual(y,f,r) =g= UseAnnual(y,f,r) + sum(rr,TradeAnnual(r,rr,f,y)*TradeRoute(r,rr,f,y)) + AccumulatedAnnualDemand(r,f,y);
 *
 * ##############* Accounting Technology Production/Use #############
 *
