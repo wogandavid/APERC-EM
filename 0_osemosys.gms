@@ -27,7 +27,7 @@ $include 3_osemosys_equ.gms
 * solve the model
 option lp=cbc;
 model osemosys /all/;
-option limrow=1e1, limcol=1e1, solprint=on;
+option limrow=1e4, limcol=1e4, solprint=on;
 solve osemosys minimizing z using lp;
 *
 * create results in file SelResults.CSV

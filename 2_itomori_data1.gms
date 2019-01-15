@@ -62,20 +62,21 @@ $offtext
 *
 $offlisting
 set EMISSION  / CO2, NOX /;
-set TECHNOLOGY / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1, 
-  RIV, RHO, RHE, RL1, RHu, RLu, SRE, TRND, TRNE, TRNG, TRNu /;
-* set     TECHNOLOGY      / ELCOAL, ELNUKE, ELHYD, ELDAM, E70, IMPDSL1, IMPGSL1, IMPCOAL1, IMPOIL1, IMPURANIUM1, RHE, RHO, RL1, SRE, TRND, TRNE, TRNG, RIV, RHu, RLu, TRNu/;
+set TECHNOLOGY / 
+  ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1, 
+  RIV, RHO, RHE, RL1, RHu, RLu, SRE, TRND, TRNE, TRNG, TRNu, HVTexp, HVTimp, HVTu 
+/;
 
-set FUEL / URANIUM, COAL, OIL, NATGAS, HYD, ELC, TRADEDELC, DSL, GSL, RH, RL, TRN /;
+set FUEL / URANIUM, COAL, OIL, NATGAS, HYD, ELC, DSL, GSL, RH, RL, TRN, ELCtrade, DUMMYF /;
 
 * SECTORAL sets:
-set ELECTRICITY(TECHNOLOGY)   / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM /;
+set ELECTRICITY(TECHNOLOGY)   / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, HVTexp, HVTimp, HVTu /;
 set SUPPLY(TECHNOLOGY)        / IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1 /;
 set RESIDENTIAL(TECHNOLOGY)   / RHO, RHE, RL1, RHu, RLu /;
 set REFINING(TECHNOLOGY)      / SRE /;
-set TRANSPORT(TECHNOLOGY)     / TRND, TRNE, TRNG, TRNu/;
+set TRANSPORT(TECHNOLOGY)     / TRND, TRNE, TRNG, TRNu /;
 
-set YEAR /2018*2030/;
+set YEAR /2018*2019/;
 YearVal(YEAR) = 2018+ord(YEAR)-1;
 
 set TIMESLICE       / ID, IN, SD, SN, WD, WN /;
@@ -146,13 +147,14 @@ $onecho > task1.txt
   par=AvailabilityFactor rng=AvailabilityFactor! Rdim=3
   par=CapacityFactor rng=CapacityFactor! Rdim=3
   par=EmissionActivityRatio rng=EmissionActivityRatio! Rdim=5
-  par=ReserveMarginTagTechnology rng=ReserveMarginTagTechnology Rdim=3
+  par=ReserveMarginTagTechnology rng=ReserveMarginTagTechnology! Rdim=3
   par=TotalAnnualMaxCapacity rng=TotalAnnualMaxCapacity! Rdim=3
   par=TotalAnnualMinCapacity rng=TotalAnnualMinCapacity! Rdim=3
   par=OperationalLife rng=OperationalLife! Rdim=2
+  par=TradeRoute rng=TradeRoute! Rdim=4
 $offecho
 
-$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx @task1.txt
+$call GDXXRW C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx @task1.txt
 execute_load "ITOMORI_data.gdx", 
   YearSplit
   AccumulatedAnnualDemand
@@ -172,6 +174,7 @@ execute_load "ITOMORI_data.gdx",
   TotalAnnualMaxCapacity
   TotalAnnualMinCapacity
   OperationalLife
+  TradeRoute
 ;
 * ## END OF EXCEL CALLS
 
@@ -184,6 +187,8 @@ execute_load "ITOMORI_data.gdx",
 *option OutputActivityRatio:4:2:3; display OutputActivityRatio;
 
 *option FixedCost:4:0:1; display FixedCost;
+
+*display TradeRoute;
 
 VariableCost(r,t,m,y)$(VariableCost(r,t,m,y) = 0) = 0.00041868;
 
@@ -212,7 +217,7 @@ parameter TechWithCapacityNeededToMeetPeakTS /
   ITOMORI.ELNATGAS  1
   ITOMORI.ELHYD     1
   ITOMORI.ELDAM     1
-  TOKYO3.ELCOAL      1
+  TOKYO3.ELCOAL     1
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 
@@ -222,78 +227,20 @@ EmissionsPenalty(r,e,y) = eps;
 parameter ReserveMarginTagFuel /
   ITOMORI.ELC.2018  1
   ITOMORI.ELC.2019  1
-  ITOMORI.ELC.2020  1
-  ITOMORI.ELC.2021  1
-  ITOMORI.ELC.2022  1
-  ITOMORI.ELC.2023  1
-  ITOMORI.ELC.2024  1
-  ITOMORI.ELC.2025  1
-  ITOMORI.ELC.2026  1
-  ITOMORI.ELC.2027  1
-  ITOMORI.ELC.2028  1
-  ITOMORI.ELC.2029  1
-  ITOMORI.ELC.2030  1
   TOKYO3.ELC.2018  1
   TOKYO3.ELC.2019  1
-  TOKYO3.ELC.2020  1
-  TOKYO3.ELC.2021  1
-  TOKYO3.ELC.2022  1
-  TOKYO3.ELC.2023  1
-  TOKYO3.ELC.2024  1
-  TOKYO3.ELC.2025  1
-  TOKYO3.ELC.2026  1
-  TOKYO3.ELC.2027  1
-  TOKYO3.ELC.2028  1
-  TOKYO3.ELC.2029  1
-  TOKYO3.ELC.2030  1
+
 /;
 *display ReserveMarginTagFuel;
 
 parameter ReserveMargin /
   ITOMORI.2018  1.18
   ITOMORI.2019  1.18
-  ITOMORI.2020  1.18
-  ITOMORI.2021  1.18
-  ITOMORI.2022  1.18
-  ITOMORI.2023  1.18
-  ITOMORI.2024  1.18
-  ITOMORI.2025  1.18
-  ITOMORI.2026  1.18
-  ITOMORI.2027  1.18
-  ITOMORI.2028  1.18
-  ITOMORI.2029  1.18
-  ITOMORI.2030  1.18
   TOKYO3.2018  1.18
   TOKYO3.2019  1.18
-  TOKYO3.2020  1.18
-  TOKYO3.2021  1.18
-  TOKYO3.2022  1.18
-  TOKYO3.2023  1.18
-  TOKYO3.2024  1.18
-  TOKYO3.2025  1.18
-  TOKYO3.2026  1.18
-  TOKYO3.2027  1.18
-  TOKYO3.2028  1.18
-  TOKYO3.2029  1.18
-  TOKYO3.2030  1.18
 /;
 *display ReserveMargin;
 
-parameter TradeRoute /
-  ITOMORI.TOKYO3.TRADEDELC.2018 0
-  ITOMORI.TOKYO3.TRADEDELC.2019 0
-  ITOMORI.TOKYO3.TRADEDELC.2020 0
-  ITOMORI.TOKYO3.TRADEDELC.2021 0
-  ITOMORI.TOKYO3.TRADEDELC.2022 0
-  ITOMORI.TOKYO3.TRADEDELC.2023 0
-  ITOMORI.TOKYO3.TRADEDELC.2024 0
-  ITOMORI.TOKYO3.TRADEDELC.2025 0
-  ITOMORI.TOKYO3.TRADEDELC.2026 0
-  ITOMORI.TOKYO3.TRADEDELC.2027 0
-  ITOMORI.TOKYO3.TRADEDELC.2028 0
-  ITOMORI.TOKYO3.TRADEDELC.2029 0
-  ITOMORI.TOKYO3.TRADEDELC.2030 0
-/;
 OperationalLife(r,t)$(OperationalLife(r,t) = 0) = 1;
 *display OperationalLife;
 
@@ -326,3 +273,7 @@ REMinProductionTarget(r,y) = 0;
 StorageInflectionTimes(y,l,b) = 0;
 
 *end;
+
+* tetsing
+
+*Trade.fx('ITOMORI','TOKYO3',l,'TRADEDELC','2018') = 1;

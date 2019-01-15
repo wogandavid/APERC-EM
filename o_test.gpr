@@ -1,8 +1,5 @@
 [PROJECT]
 
-[RP:OSEMOSYS_DEC]
-1=
-
 [RP:UTOPIA_DATA1]
 1=
 
@@ -14,9 +11,6 @@ SqTrail0=0
 Order=1,2
 Decim=7
 PlaneRownr=-1
-
-[RP:OSEMOSYS_EQU]
-1=
 
 [RP:OSEMOSYS_RES]
 1=
@@ -69,38 +63,59 @@ PlaneRownr=-1
 [RP:ITOMORI_DATA1]
 1=
 
-[RP:OSEMOSYS]
-1=
-
 [SOLVERS]
 LP=CBC
 MCP=PATH
 
+[RP:IO_TEST]
+1=
+
+[RP:LEAST]
+1=
+
+[RP:LINEAR]
+1=
+
+[RP:LS01]
+1=
+
+[RP:3_OSEMOSYS_EQU]
+1=
+
+[RP:2_ITOMORI_DATA1]
+1=
+
+[RP:OSEMOSYS]
+1=
+
+[RP:OSEMOSYS_EQU]
+1=
+
 [RP:ITOMORI_DATA]
+1=
+
+[RP:OSEMOSYS_DEC]
 1=
 
 [RP:0_OSEMOSYS]
 1=
 
-[RP:IO_TEST]
-1=
-
 [MRUFILES]
-1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data.gms
-2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data1.gms
-3=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\ITOMORI_data.gdx
-4=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\osemosys_res.gms
-5=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\osemosys_equ.gms
-6=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data.lst
+1=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\itomori_data.gms
+2=C:\Users\david.wogan.IEEJ\Documents\GitHub\OSeMOSYS\OSeMOSYS_GAMS\osemosys.gms
+3=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\2_itomori_data1.gms
+4=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\3_osemosys_equ.gms
+5=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\ls01.gms
+6=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\linear.gms
+7=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\least.gms
+8=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data.gms
 
 [OPENWINDOW_1]
-FILE0=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\0_osemosys.gms
-FILE1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\0_osemosys.lst
-FILE2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.gms
-FILE3=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.lst
-FILE4=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\io_test.gms
+FILE0=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\0_osemosys.gms
+FILE1=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\0_osemosys.lst
+FILE2=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\0_osemosys.lst
 MAXIM=0
-TOP=5
-LEFT=14
-HEIGHT=793
-WIDTH=1435
+TOP=13
+LEFT=25
+HEIGHT=855
+WIDTH=1417

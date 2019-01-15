@@ -153,8 +153,8 @@ positive variable Use(YEAR,TIMESLICE,FUEL,ECONOMY);
 positive variable ProductionAnnual(YEAR,FUEL,ECONOMY);
 positive variable UseAnnual(YEAR,FUEL,ECONOMY);
 *
-positive variable Trade(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR);
-positive variable TradeAnnual(ECONOMY,ECONOMY2,FUEL,YEAR);
+variable Trade(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR);
+variable TradeAnnual(ECONOMY,ECONOMY2,FUEL,YEAR);
 *
 *
 * ############### Costing Variables #############

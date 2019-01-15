@@ -118,7 +118,7 @@ equation EBb2_EnergyBalanceEachYear2(YEAR,FUEL,ECONOMY);
 EBb2_EnergyBalanceEachYear2(y,f,r).. sum(l, Use(y,l,f,r)) =e= UseAnnual(y,f,r);
 *s.t. EBb3_EnergyBalanceEachYear3{r in REGION, rr in REGION, f in FUEL, y in YEAR}: sum{l in TIMESLICE} Trade[r,rr,l,f,y] = TradeAnnual[r,rr,f,y];
 equation EBb3_EnergyBalanceEachYear3(ECONOMY,ECONOMY2,FUEL,YEAR);
-EBb3_EnergyBalanceEachYear3(r,rr,f,y).. sum(l,Trade(r,rr,l,f,y)) =e= TradeAnnual(r,rr,f,y);
+EBb3_EnergyBalanceEachYear3(r,rr,f,y).. sum(l,Trade(r,rr,l,f,y)*TradeRoute(r,rr,f,y)) =e= TradeAnnual(r,rr,f,y);
 *s.t. EBb4_EnergyBalanceEachYear4{r in REGION, f in FUEL, y in YEAR}: ProductionAnnual[r,f,y] >= UseAnnual[r,f,y] + sum{rr in REGION} TradeAnnual[r,rr,f,y]*TradeRoute[r,rr,f,y] + AccumulatedAnnualDemand[r,f,y];
 equation EBb4_EnergyBalanceEachYear4(YEAR,FUEL,ECONOMY);
 EBb4_EnergyBalanceEachYear4(y,f,r).. ProductionAnnual(y,f,r) =g= UseAnnual(y,f,r) + sum(rr,TradeAnnual(r,rr,f,y)*TradeRoute(r,rr,f,y)) + AccumulatedAnnualDemand(r,f,y);
