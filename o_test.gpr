@@ -1,8 +1,5 @@
 [PROJECT]
 
-[RP:UTOPIA_DATA1]
-1=
-
 [GDXDISP: AmbientTem Par 2]
 PlaneDim=0
 RowDim=2
@@ -16,13 +13,14 @@ PlaneRownr=-1
 1=
 
 [GDXDISP: AccumulatedAnnualDemand Par 3]
-PlaneDim=0
-RowDim=3
+PlaneDim=1
+RowDim=2
 Squeeze=1
 SqTrail0=0
 Order=1,2,3
 Decim=7
-PlaneRownr=-1
+PlaneRownr=1
+PlaneFilter1=OSAKA
 
 [GDXDISP: FUEL Set 1]
 PlaneDim=0
@@ -79,9 +77,6 @@ MCP=PATH
 [RP:LS01]
 1=
 
-[RP:3_OSEMOSYS_EQU]
-1=
-
 [RP:2_ITOMORI_DATA1]
 1=
 
@@ -97,25 +92,486 @@ MCP=PATH
 [RP:OSEMOSYS_DEC]
 1=
 
+[RP:3_OSEMOSYS_EQU]
+1=
+
+[RP:4_OSEMOSYS_RES]
+1=
+
+[GDXDISP: SalvageFactor Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SpecifiedAnnualDemand Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: VariableCost Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: YearSplit Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: AvailabilityFactor Par 3]
+PlaneDim=1
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: EmissionActivityRatio Par 5]
+PlaneDim=0
+RowDim=5
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: InputActivityRatio Par 5]
+PlaneDim=0
+RowDim=5
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: AAC1_TotalAnnualTechnologyActivity Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: b Alias 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: BOUNDARY_INSTANCES Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: CapacityFactor Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: t Alias 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TotalAnnualMaxCapacity Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Trade Var 5]
+PlaneDim=2
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5,6
+Decim=7
+PlaneRownr=-1
+PlaneFilter1=tokyo
+PlaneFilter2=OSAKA
+
+[GDXDISP: TradeAnnual Var 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TechnologyToStorage Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TechnologyFromStorage Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TECHNOLOGY Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TDC1_TotalDiscountedCostByTechnology Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TCC2_TotalAnnualMinCapacityConstraint Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TCC1_TotalAnnualMaxCapacityConstraint Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TAC3_TotalModelHorizenTechnologyActivityLowerLimit Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TAC2_TotalModelHorizenTechnologyActivityUpperLimit Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: TAC1_TotalModelHorizenTechnologyActivity Equ 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SV4_SalvageValueDiscToStartYr Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SV3_SalvageValueAtEndOfPeriod3 Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SV2_SalvageValueAtEndOfPeriod2 Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SV1_SalvageValueAtEndOfPeriod1 Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SUPPLY Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: StorageUpperLimit Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: StorageLowerLimit Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: StorageLevel Var 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: StorageInflectionTimes Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: StorageDischarge Var 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: StorageCharge Var 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: STORAGE Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: StartYear Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SpecifiedDemandProfile Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SalvageValue Var 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: S6_StorageUpperLimit Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: S5_StorageLowerLimit Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: S4_StorageLevelAtInflection Equ 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: S3_NetStorageCharge Equ 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: S2_StorageDischarge Equ 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: S1_StorageCharge Equ 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: s Alias 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Acc1_FuelProductionByTechnology Equ 5]
+PlaneDim=0
+RowDim=5
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4,5,6
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: AnnualFixedOperatingCost Var 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: AccumulatedNewCapacity Var 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+SqTrail0=0
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[RP:2_TOKYO_DATA1]
+1=
+
+[RP:1_OSEMOSYS_DEC]
+1=
+
 [RP:0_OSEMOSYS]
+1=
+2=gdx=res_tokyo
+3=gdx=res_tokyo2
+
+[RP:UTOPIA_DATA1]
 1=
 
 [MRUFILES]
-1=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\itomori_data.gms
-2=C:\Users\david.wogan.IEEJ\Documents\GitHub\OSeMOSYS\OSeMOSYS_GAMS\osemosys.gms
-3=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\2_itomori_data1.gms
-4=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\3_osemosys_equ.gms
-5=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\ls01.gms
-6=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\linear.gms
-7=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\least.gms
-8=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\itomori_data.gms
+1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\utopia_data1.gms
+2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\res_tokyo.gdx
+3=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\1_osemosys_dec.gms
+4=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\tokyo_data2.gdx
+5=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\4_osemosys_res.gms
+6=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\3_osemosys_equ.gms
+7=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\itomori_data.gms
+8=C:\Users\david.wogan.IEEJ\Documents\GitHub\OSeMOSYS\OSeMOSYS_GAMS\osemosys.gms
+9=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\2_itomori_data1.gms
 
 [OPENWINDOW_1]
-FILE0=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\0_osemosys.gms
-FILE1=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\0_osemosys.lst
-FILE2=C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\0_osemosys.lst
+FILE0=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\0_osemosys.gms
+FILE1=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\0_osemosys.lst
+FILE2=C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\0_osemosys.lst
 MAXIM=0
-TOP=13
-LEFT=25
-HEIGHT=855
-WIDTH=1417
+TOP=2
+LEFT=7
+HEIGHT=796
+WIDTH=1574

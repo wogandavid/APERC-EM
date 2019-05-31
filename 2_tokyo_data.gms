@@ -1,5 +1,5 @@
-* ITOMORI Example Economy data file for use with APERC Energy Model
-* 
+* tokyo Example Economy data file for use with APERC Energy Model
+*
 * APERC Energy Model 2019.01.02 created by David Wogan, APERC
 *
 * Based on OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
@@ -62,9 +62,9 @@ $offtext
 *
 $offlisting
 set EMISSION  / CO2, NOX /;
-set TECHNOLOGY / 
-  ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1, 
-  RIV, RHO, RHE, RL1, RHu, RLu, SRE, TRND, TRNE, TRNG, TRNu, HVTexp, HVTimp, HVTu 
+set TECHNOLOGY /
+  ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1,
+  RIV, RHO, RHE, RL1, RHu, RLu, SRE, TRND, TRNE, TRNG, TRNu, HVTexp, HVTimp, HVTu
 /;
 
 set FUEL / URANIUM, COAL, OIL, NATGAS, HYD, ELC, DSL, GSL, RH, RL, TRN, ELCtrade, DUMMYF /;
@@ -76,12 +76,12 @@ set RESIDENTIAL(TECHNOLOGY)   / RHO, RHE, RL1, RHu, RLu /;
 set REFINING(TECHNOLOGY)      / SRE /;
 set TRANSPORT(TECHNOLOGY)     / TRND, TRNE, TRNG, TRNu /;
 
-set YEAR /2018*2019/;
+set YEAR /2018*2020/;
 YearVal(YEAR) = 2018+ord(YEAR)-1;
 
 set TIMESLICE       / ID, IN, SD, SN, WD, WN /;
 set MODE_OF_OPERATION       / 1, 2 /;
-set ECONOMY  / ITOMORI, TOKYO3 /;
+set ECONOMY  / tokyo, OSAKA /;
 set STORAGE / DAM /;
 set BOUNDARY_INSTANCES  / endc1 /;
 $offlisting
@@ -121,12 +121,12 @@ parameter StartYear / 2018 /;
 *display StartYear;
 
 parameter TechnologyToStorage /
-  ITOMORI.ELDAM.DAM.2  1
+  tokyo.ELDAM.DAM.2  1
 /;
 *display TechnologyToStorage;
 
 parameter TechnologyFromStorage /
-  ITOMORI.ELDAM.DAM.1  1
+  tokyo.ELDAM.DAM.1  1
 /;
 *display TechnologyFromStorage;
 
@@ -154,8 +154,8 @@ $onecho > task1.txt
   par=TradeRoute rng=TradeRoute! Rdim=4
 $offecho
 
-$call GDXXRW C:\Users\david.wogan.IEEJ\Documents\GitHub\osemosys_test\ITOMORI_data.xlsx @task1.txt
-execute_load "ITOMORI_data.gdx", 
+$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\tokyo_data.xlsx @task1.txt
+execute_load "tokyo_data.gdx",
   YearSplit
   AccumulatedAnnualDemand
   SpecifiedAnnualDemand
@@ -201,23 +201,23 @@ CapacityFactor(r,t,y)$(CapacityFactor(r,t,y) = 0) = 1;
 * energy produced when one unit of capacity is fully used in one year
 * 0.753224421 is the level of energy production in Mtoe produced from 1 GW operating for 1 year
 parameter CapacityToActivityUnit /
-  ITOMORI.ELCOAL    0.753224421
-  ITOMORI.ELNUKE    0.753224421
-  ITOMORI.ELNATGAS  0.753224421
-  ITOMORI.ELHYD     0.753224421
-  ITOMORI.ELDAM     0.753224421
-  TOKYO3.ELCOAL     0.753224421
+  tokyo.ELCOAL    0.753224421
+  tokyo.ELNUKE    0.753224421
+  tokyo.ELNATGAS  0.753224421
+  tokyo.ELHYD     0.753224421
+  tokyo.ELDAM     0.753224421
+  osaka.ELCOAL     0.753224421
 /;
 CapacityToActivityUnit(r,t)$(CapacityToActivityUnit(r,t) = 0) = 1;
 *display CapacityToActivityUnit;
 
 parameter TechWithCapacityNeededToMeetPeakTS /
-  ITOMORI.ELCOAL    1
-  ITOMORI.ELNUKE    1
-  ITOMORI.ELNATGAS  1
-  ITOMORI.ELHYD     1
-  ITOMORI.ELDAM     1
-  TOKYO3.ELCOAL     1
+  tokyo.ELCOAL    1
+  tokyo.ELNUKE    1
+  tokyo.ELNATGAS  1
+  tokyo.ELHYD     1
+  tokyo.ELDAM     1
+  osaka.ELCOAL     0
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 
@@ -225,19 +225,19 @@ EmissionsPenalty(r,e,y) = eps;
 *display EmissionsPenalty;
 
 parameter ReserveMarginTagFuel /
-  ITOMORI.ELC.2018  1
-  ITOMORI.ELC.2019  1
-  TOKYO3.ELC.2018  1
-  TOKYO3.ELC.2019  1
+  tokyo.ELC.2018  1
+  tokyo.ELC.2019  1
+  osaka.ELC.2018  1
+  osaka.ELC.2019  1
 
 /;
 *display ReserveMarginTagFuel;
 
 parameter ReserveMargin /
-  ITOMORI.2018  1.18
-  ITOMORI.2019  1.18
-  TOKYO3.2018  1.18
-  TOKYO3.2019  1.18
+  tokyo.2018  1.18
+  tokyo.2019  1.18
+  osaka.2018  1.18
+  osaka.2019  1.18
 /;
 *display ReserveMargin;
 
@@ -276,4 +276,4 @@ StorageInflectionTimes(y,l,b) = 0;
 
 * tetsing
 
-*Trade.fx('ITOMORI','TOKYO3',l,'TRADEDELC','2018') = 1;
+*Trade.fx('tokyo','osaka',l,'TRADEDELC','2018') = 1;

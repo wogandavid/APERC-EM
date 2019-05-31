@@ -7,7 +7,7 @@
 * Files required are:
 * 0_osemosys.gms (this file)
 * 1_osemosys_dec.gms
-* 2_itomori_data1.gms
+* 2_tokyo_data.gms
 * 3_osemosys_equ.gms
 * 4_osemosys_res.gms
 *
@@ -15,8 +15,8 @@
 $offlisting
 $include 1_osemosys_dec.gms
 *
-* specify ITOMORI Example Economy data
-$include 2_itomori_data1.gms
+* specify tokyo Example Economy data
+$include 2_tokyo_data.gms
 *
 * define model equations
 $offlisting
@@ -25,10 +25,10 @@ $offlisting
 $include 3_osemosys_equ.gms
 *
 * solve the model
-option lp=cbc;
+option LP=cbc;
 model osemosys /all/;
-option limrow=1e4, limcol=1e4, solprint=on;
-solve osemosys minimizing z using lp;
+option limrow=1e4, limcol=1e4, solprint=on, savepoint=2;
+solve osemosys minimizing z using LP;
 *
 * create results in file SelResults.CSV
 $include 4_osemosys_res.gms

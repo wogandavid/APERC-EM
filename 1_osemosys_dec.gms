@@ -1,5 +1,5 @@
 * OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
-* 
+*
 * Trade additions by David Wogan, APERC - Jan 2019
 *
 * OSEMOSYS 2011.07.07
@@ -153,6 +153,8 @@ positive variable Use(YEAR,TIMESLICE,FUEL,ECONOMY);
 positive variable ProductionAnnual(YEAR,FUEL,ECONOMY);
 positive variable UseAnnual(YEAR,FUEL,ECONOMY);
 *
+
+* infeasible if declared as positive variable
 variable Trade(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR);
 variable TradeAnnual(ECONOMY,ECONOMY2,FUEL,YEAR);
 *
