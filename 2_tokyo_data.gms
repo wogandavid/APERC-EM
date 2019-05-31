@@ -154,7 +154,7 @@ $onecho > task1.txt
   par=TradeRoute rng=TradeRoute! Rdim=4
 $offecho
 
-$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\osemosys_test\tokyo_data.xlsx @task1.txt
+$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\APERC-EM\tokyo_data.xlsx @task1.txt
 execute_load "tokyo_data.gdx",
   YearSplit
   AccumulatedAnnualDemand
