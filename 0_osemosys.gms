@@ -1,5 +1,5 @@
 * =======================================================================================================
-* APERC Energy Model 2019.01.04 created by David Wogan, ASIA PACIFIC ENERGY RESEARCH CENTRE, Tokyo, Japan
+* APERC Energy Model 2019.06.03 created by David Wogan, ASIA PACIFIC ENERGY RESEARCH CENTRE, Tokyo, Japan
 * david.wogan@aperc.ieej.or.jp
 *
 * Based on OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
