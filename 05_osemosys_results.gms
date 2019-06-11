@@ -2,6 +2,9 @@
 *
 * OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
 *
+* =======================================================================================================
+
+
 FILE ANT /SelResults.CSV/;
 PUT ANT; ANT.ND=6; ANT.PW=400; ANT.PC=5;
 * Total emissions (by ECONOMY, emission)

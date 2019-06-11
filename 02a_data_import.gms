@@ -1,103 +1,8 @@
-* tokyo Example Economy data file for use with APERC Energy Model
-*
-* APERC Energy Model 2019.01.02 created by David Wogan, APERC
-*
-* Based on OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
-*
-$offlisting
-*
-$ontext
-  **
-  **  Energy and demands in Mtoe/a
-  **  Power plants in GW
-  **  Investment and fixed O&M Costs: Power plant: Million $ / GW (//$/kW)
-  **  Investment and fixed O&M Costs Costs: Other plant costs: Million $/Mtoe/a
-  **  Variable O&M (& Import) Costs: Million $ / Mtoe (//$/toe)
-  *
-  * Summary of Set: TECHNOLOGY
-  * ELCOAL = Coal fuelled power plant
-  * ELNATGAS = Natural gas fuelled power plant
-  * ELNUKE = Nuclear power plant
-  * ELHYD = Hydro power plant
-  * ELDAM = Consumes and generates electricity
-  * IMPDSL1 = Diesel supply
-  * IMPGSL1 = Gasoline supply
-  * IMPCOAL1 = Coal supply
-  * IMPNATGAS = Uranium supply
-  * IMPOIL1 = Crude oil supply
-  * IMPURANIUM1 = Uranium supply
-  * RHE = Residential electricity heating consuming electricity
-  * RL1 = Residential lighting consuming electricity
-  * SRE = Refinery
-  * TRND = Transport in passenger km consuming diesel
-  * TRNE = Transport in passenger km consuming electricity
-  * TRNG = Transport in passenger km consuming gasoline
-  * RIV = River to supply hydro power plants
-  * RHu = Unmet heating demand
-  * RLu = Unmet lighting demand
-  * TRNu = Unmet transport demand
-  *
-  * Summary of Set: FUEL
-  * DSL = Diesel (Mtoe)
-  * ELC = Electricity (Mtoe)
-  * GSL = Gasoline (Mtoe)
-  * COAL = Coal (Mtoe)
-  * HYD = Hydro (Mtoe)
-  * OIL = Oil (Mtoe)
-  * NATGAS = Natural gas
-  * URANIUM = Uranium (Mtoe)
-  * RH = Heating demand (Mtoe)
-  * RL = Lighting demand (Mtoe)
-  * TRN = Transport demand (Mtoe)
-  *
-  * set TIMESLICE
-  * ID = Intermediate season, day
-  * IN = Intermediate season, night
-  * SD = Summer season, day
-  * SN = Summer season, night
-  * ID = Winter season, day
-  * IN = Winter season, night
-$offtext
+* =======================================================================================================
+* Import data
+* =======================================================================================================
 
-*
-$offlisting
-set EMISSION  / CO2, NOX /;
-set TECHNOLOGY /
-  ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1,
-  RIV, RHO, RHE, RL1, RHu, RLu, SRE, TRND, TRNE, TRNG, TRNu, HVTexp, HVTimp, HVTu
-/;
 
-set FUEL / URANIUM, COAL, OIL, NATGAS, HYD, ELC, DSL, GSL, RH, RL, TRN, ELCtrade, DUMMYF /;
-
-* SECTORAL sets:
-set ELECTRICITY(TECHNOLOGY)   / ELCOAL, ELNUKE, ELNATGAS, ELHYD, ELDAM, HVTexp, HVTimp, HVTu /;
-set SUPPLY(TECHNOLOGY)        / IMPCOAL1, IMPOIL1, IMPNATGAS, IMPURANIUM1, IMPDSL1, IMPGSL1 /;
-set RESIDENTIAL(TECHNOLOGY)   / RHO, RHE, RL1, RHu, RLu /;
-set REFINING(TECHNOLOGY)      / SRE /;
-set TRANSPORT(TECHNOLOGY)     / TRND, TRNE, TRNG, TRNu /;
-
-set YEAR /2018*2020/;
-YearVal(YEAR) = 2018+ord(YEAR)-1;
-
-set TIMESLICE       / ID, IN, SD, SN, WD, WN /;
-set MODE_OF_OPERATION       / 1, 2 /;
-set ECONOMY  / tokyo, OSAKA /;
-set STORAGE / DAM /;
-set BOUNDARY_INSTANCES  / endc1 /;
-$offlisting
-
-display EMISSION;
-display TECHNOLOGY;
-display FUEL;
-display YEAR;
-display TIMESLICE;
-display MODE_OF_OPERATION;
-display ECONOMY;
-display STORAGE;
-display BOUNDARY_INSTANCES;
-
-$offlisting
-*
 AnnualExogenousEmission(r,e,y) = 0;
 
 AnnualEmissionLimit(r,e,y) = 9999;
@@ -152,9 +57,11 @@ $onecho > task1.txt
   par=TotalAnnualMinCapacity rng=TotalAnnualMinCapacity! Rdim=3
   par=OperationalLife rng=OperationalLife! Rdim=2
   par=TradeRoute rng=TradeRoute! Rdim=4
+  par=AnnualEmissionLimit rng=AnnualEmissionLimit! Rdim=3
+  par=TotalTechnologyAnnualActivityUpperLimit rng=TotalTechnologyAnnualActivityUp! Rdim=3
 $offecho
 
-$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\APERC-EM\tokyo_data.xlsx @task1.txt
+$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\APERC-EM\TOKYO_data.xlsx @task1.txt
 execute_load "tokyo_data.gdx",
   YearSplit
   AccumulatedAnnualDemand
@@ -175,6 +82,8 @@ execute_load "tokyo_data.gdx",
   TotalAnnualMinCapacity
   OperationalLife
   TradeRoute
+  AnnualEmissionLimit
+  TotalTechnologyAnnualActivityUpperLimit
 ;
 * ## END OF EXCEL CALLS
 
