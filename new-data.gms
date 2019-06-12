@@ -1,9 +1,0 @@
-parameter TradeRoute
-/
-TOKYO.  OSAKA.  RH.	2018	0
-TOKYO.	OSAKA.	RH.	2019	0
-OSAKA.	TOKYO.	RH.	2018	0
-OSAKA.	TOKYO.	RH.	2019	0
-
-/
-;
