@@ -3,12 +3,13 @@
 * david.wogan@aperc.ieej.or.jp
 *
 * Based on OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
-*
+* https://osemosys.readthedocs.io/en/latest/
+
 * Files required are:
 * 00_osemosys.gms (this file)
 * 01_osemosys_declarations.gms
 * 02_sets.gms
-* 0_data_import.gms
+* 03_sector_data_import.gms
 * 04_osemosys_equations.gms
 * 05_osemosys_results.gms
 *
@@ -23,9 +24,8 @@ $include 02_sets.gms
 * Note: when you build your sector:
 * 1. rename the file to sectornumber_name_data.gms
 * 2. move the data file to your sector folder
-* 3. change the path to your folder.
-$include 02a_data_import.gms
-
+* 3. change the $include statement to your folder.
+$include 03_sector_data_import.gms
 *
 * define model equations
 $offlisting

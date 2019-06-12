@@ -3,7 +3,6 @@
 * Configure model policies and adjustments
 * =======================================================================================================
 
-
 * ## BEGIN EXCEL CALLS
 * parameters listed in Excel file
 $onecho > task1.txt
@@ -17,6 +16,7 @@ $onecho > task1.txt
   par=CapitalCost rng=CapitalCost! Rdim=3
   par=VariableCost rng=VariableCost! Rdim=4
   par=ResidualCapacity rng=ResidualCapacity! Rdim=3
+  par=CapacityToActivityUnit rng=CapacityToActivityUnit! Rdim=2
   par=SalvageFactor rng=SalvageFactor! Rdim=3
   par=AvailabilityFactor rng=AvailabilityFactor! Rdim=3
   par=CapacityFactor rng=CapacityFactor! Rdim=3
@@ -24,14 +24,15 @@ $onecho > task1.txt
   par=ReserveMarginTagTechnology rng=ReserveMarginTagTechnology! Rdim=3
   par=TotalAnnualMaxCapacity rng=TotalAnnualMaxCapacity! Rdim=3
   par=TotalAnnualMinCapacity rng=TotalAnnualMinCapacity! Rdim=3
+  par=ReserveMargin rng=ReserveMargin! Rdim=2
   par=OperationalLife rng=OperationalLife! Rdim=2
-
+  par=TradeRoute rng=TradeRoute! Rdim=4
   par=AnnualEmissionLimit rng=AnnualEmissionLimit! Rdim=3
   par=TotalTechnologyAnnualActivityUpperLimit rng=TotalTechnologyAnnualActivityUp! Rdim=3
 $offecho
-*  par=TradeRoute rng=TradeRoute! Rdim=4
-$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\APERC-EM\TOKYO_data.xlsx @task1.txt
-execute_load "tokyo_data.gdx",
+
+$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\APERC-EM\sector_data.xlsx @task1.txt
+execute_load "sector_data.gdx",
   YearSplit
   AccumulatedAnnualDemand
   SpecifiedAnnualDemand
@@ -42,6 +43,7 @@ execute_load "tokyo_data.gdx",
   CapitalCost
   VariableCost
   ResidualCapacity
+  CapacityToActivityUnit
   SalvageFactor
   AvailabilityFactor
   CapacityFactor
@@ -49,23 +51,22 @@ execute_load "tokyo_data.gdx",
   ReserveMarginTagTechnology
   TotalAnnualMaxCapacity
   TotalAnnualMinCapacity
+  ReserveMargin
   OperationalLife
-
+  TradeRoute
   AnnualEmissionLimit
   TotalTechnologyAnnualActivityUpperLimit
 ;
-*  TradeRoute
+
 * ## END OF EXCEL CALLS
 * ## Parameters not in Excel file
 
-$include new-data.gms
-
-AnnualExogenousEmission(r,e,y) = 0;
-AnnualEmissionLimit(r,e,y) = 9999;
+AnnualExogenousEmission(r,ghg,y) = 0;
+AnnualEmissionLimit(r,ghg,y) = 9999;
 *display AnnualEmissionLimit;
 
-ModelPeriodExogenousEmission(r,e) = 0;
-ModelPeriodEmissionLimit(r,e) = 9999;
+ModelPeriodExogenousEmission(r,ghg) = 0;
+ModelPeriodEmissionLimit(r,ghg) = 9999;
 *display ModelPeriodEmissionLimit;
 
 StorageUpperLimit(r,s) = 9999;
@@ -77,12 +78,12 @@ DiscountRate(r,t) = 0.05;
 *display DiscountRate;
 
 parameter TechnologyToStorage /
-  tokyo.ELDAM.DAM.2  1
+  AUS.ELDAM.DAM.2  1
 /;
 *display TechnologyToStorage;
 
 parameter TechnologyFromStorage /
-  tokyo.ELDAM.DAM.1  1
+  AUS.ELDAM.DAM.1  1
 /;
 
 VariableCost(r,t,m,y)$(VariableCost(r,t,m,y) = 0) = 0.00041868;
@@ -94,46 +95,29 @@ CapacityFactor(r,t,y)$(CapacityFactor(r,t,y) = 0) = 1;
 * Capacity to Activity Unit:
 * energy produced when one unit of capacity is fully used in one year
 * 0.753224421 is the level of energy production in Mtoe produced from 1 GW operating for 1 year
-parameter CapacityToActivityUnit /
-  tokyo.ELCOAL    0.753224421
-  tokyo.ELNUKE    0.753224421
-  tokyo.ELNATGAS  0.753224421
-  tokyo.ELHYD     0.753224421
-  tokyo.ELDAM     0.753224421
-  osaka.ELCOAL     0.753224421
-/;
 CapacityToActivityUnit(r,t)$(CapacityToActivityUnit(r,t) = 0) = 1;
 *display CapacityToActivityUnit;
 
 parameter TechWithCapacityNeededToMeetPeakTS /
-  tokyo.ELCOAL    1
-  tokyo.ELNUKE    1
-  tokyo.ELNATGAS  1
-  tokyo.ELHYD     1
-  tokyo.ELDAM     1
-  osaka.ELCOAL    0
+  AUS.ELCOAL    1
+  AUS.ELNUKE    1
+  AUS.ELNATGAS  1
+  AUS.ELHYD     1
+  AUS.ELDAM     1
+  ROW.ELCOAL    0
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 
-EmissionsPenalty(r,e,y) = eps;
+EmissionsPenalty(r,ghg,y) = eps;
 *display EmissionsPenalty;
 
 parameter ReserveMarginTagFuel /
-  tokyo.ELC.2018  1
-  tokyo.ELC.2019  1
-  osaka.ELC.2018  1
-  osaka.ELC.2019  1
-
+  AUS.ELC.2016  1
+  AUS.ELC.2017  1
+  ROW.ELC.2016  1
+  ROW.ELC.2017  1
 /;
 *display ReserveMarginTagFuel;
-
-parameter ReserveMargin /
-  tokyo.2018  1.18
-  tokyo.2019  1.18
-  osaka.2018  1.18
-  osaka.2019  1.18
-/;
-*display ReserveMargin;
 
 OperationalLife(r,t)$(OperationalLife(r,t) = 0) = 1;
 *display OperationalLife;

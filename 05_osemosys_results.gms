@@ -8,8 +8,8 @@
 FILE ANT /SelResults.CSV/;
 PUT ANT; ANT.ND=6; ANT.PW=400; ANT.PC=5;
 * Total emissions (by ECONOMY, emission)
-loop((r,e),
-put / "ModelPeriodEmissions",r.TL,e.TL,ModelPeriodEmissions.L(e,r);
+loop((r,ghg),
+put / "ModelPeriodEmissions",r.TL,ghg.TL,ModelPeriodEmissions.L(ghg,r);
 );
 put /;
 * Total cost (by ECONOMY)
@@ -78,15 +78,15 @@ loop(y, put UseByTechnology.L(y,l,t,f,r));
 );
 put /;
 * Total Annual Emissions (by ECONOMY, emission, year)
-loop((r,e),
-put / "AnnualEmissions",r.TL,e.TL;
-loop(y, put AnnualEmissions.L(y,e,r));
+loop((r,ghg),
+put / "AnnualEmissions",r.TL,ghg.TL;
+loop(y, put AnnualEmissions.L(y,ghg,r));
 );
 put /;
 * Annual Emissions (by ECONOMY, technology, emission, year)
-loop((r,t,e)$(sum((y,m), EmissionActivityRatio(r,t,e,m,y)) > 0),
-put / "AnnualEmissionsByTechnology",r.TL,t.TL,e.TL;
-loop(y, put AnnualTechnologyEmission.L(y,t,e,r));
+loop((r,t,ghg)$(sum((y,m), EmissionActivityRatio(r,t,ghg,m,y)) > 0),
+put / "AnnualEmissionsByTechnology",r.TL,t.TL,ghg.TL;
+loop(y, put AnnualTechnologyEmission.L(y,t,ghg,r));
 );
 put /;
 PUTCLOSE ANT;
