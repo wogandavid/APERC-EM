@@ -1,42 +1,11 @@
 * =======================================================================================================
 * Import data
+* Configure model policies and adjustments
 * =======================================================================================================
 
 
-AnnualExogenousEmission(r,e,y) = 0;
-
-AnnualEmissionLimit(r,e,y) = 9999;
-*display AnnualEmissionLimit;
-
-ModelPeriodExogenousEmission(r,e) = 0;
-
-ModelPeriodEmissionLimit(r,e) = 9999;
-*display ModelPeriodEmissionLimit;
-
-StorageUpperLimit(r,s) = 9999;
-*display StorageUpperLimit;
-
-StorageLowerLimit(r,s) = 0;
-* display StorageLowerLimit;
-
-DiscountRate(r,t) = 0.05;
-*display DiscountRate;
-
-parameter StartYear / 2018 /;
-*display StartYear;
-
-parameter TechnologyToStorage /
-  tokyo.ELDAM.DAM.2  1
-/;
-*display TechnologyToStorage;
-
-parameter TechnologyFromStorage /
-  tokyo.ELDAM.DAM.1  1
-/;
-*display TechnologyFromStorage;
-
 * ## BEGIN EXCEL CALLS
-
+* parameters listed in Excel file
 $onecho > task1.txt
   par=YearSplit rng=YearSplit! Rdim=2
   par=AccumulatedAnnualDemand rng=AccumulatedAnnualDemand! Rdim=3
@@ -56,11 +25,11 @@ $onecho > task1.txt
   par=TotalAnnualMaxCapacity rng=TotalAnnualMaxCapacity! Rdim=3
   par=TotalAnnualMinCapacity rng=TotalAnnualMinCapacity! Rdim=3
   par=OperationalLife rng=OperationalLife! Rdim=2
-  par=TradeRoute rng=TradeRoute! Rdim=4
+
   par=AnnualEmissionLimit rng=AnnualEmissionLimit! Rdim=3
   par=TotalTechnologyAnnualActivityUpperLimit rng=TotalTechnologyAnnualActivityUp! Rdim=3
 $offecho
-
+*  par=TradeRoute rng=TradeRoute! Rdim=4
 $call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\APERC-EM\TOKYO_data.xlsx @task1.txt
 execute_load "tokyo_data.gdx",
   YearSplit
@@ -81,30 +50,46 @@ execute_load "tokyo_data.gdx",
   TotalAnnualMaxCapacity
   TotalAnnualMinCapacity
   OperationalLife
-  TradeRoute
+
   AnnualEmissionLimit
   TotalTechnologyAnnualActivityUpperLimit
 ;
+*  TradeRoute
 * ## END OF EXCEL CALLS
+* ## Parameters not in Excel file
 
-*option YearSplit:4:1:1; display YearSplit;
+$include new-data.gms
 
-*option SpecifiedDemandProfile:4:2:2; display SpecifiedDemandProfile;
+AnnualExogenousEmission(r,e,y) = 0;
+AnnualEmissionLimit(r,e,y) = 9999;
+*display AnnualEmissionLimit;
 
-*option InputActivityRatio:4:2:3; display InputActivityRatio;
+ModelPeriodExogenousEmission(r,e) = 0;
+ModelPeriodEmissionLimit(r,e) = 9999;
+*display ModelPeriodEmissionLimit;
 
-*option OutputActivityRatio:4:2:3; display OutputActivityRatio;
+StorageUpperLimit(r,s) = 9999;
+StorageLowerLimit(r,s) = 0;
+*display StorageUpperLimit;
+* display StorageLowerLimit;
 
-*option FixedCost:4:0:1; display FixedCost;
+DiscountRate(r,t) = 0.05;
+*display DiscountRate;
 
-*display TradeRoute;
+parameter TechnologyToStorage /
+  tokyo.ELDAM.DAM.2  1
+/;
+*display TechnologyToStorage;
+
+parameter TechnologyFromStorage /
+  tokyo.ELDAM.DAM.1  1
+/;
 
 VariableCost(r,t,m,y)$(VariableCost(r,t,m,y) = 0) = 0.00041868;
 
 AvailabilityFactor(r,t,y)$(AvailabilityFactor(r,t,y) = 0) = 1;
 
 CapacityFactor(r,t,y)$(CapacityFactor(r,t,y) = 0) = 1;
-*display EmissionActivityRatio;
 
 * Capacity to Activity Unit:
 * energy produced when one unit of capacity is fully used in one year
@@ -126,7 +111,7 @@ parameter TechWithCapacityNeededToMeetPeakTS /
   tokyo.ELNATGAS  1
   tokyo.ELHYD     1
   tokyo.ELDAM     1
-  osaka.ELCOAL     0
+  osaka.ELCOAL    0
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 
@@ -154,9 +139,6 @@ OperationalLife(r,t)$(OperationalLife(r,t) = 0) = 1;
 *display OperationalLife;
 
 TotalAnnualMaxCapacity(r,t,y)$(TotalAnnualMaxCapacity(r,t,y) = 0) = 99999;
-*display TotalAnnualMaxCapacity;
-
-*display TotalAnnualMinCapacity;
 
 TotalAnnualMaxCapacityInvestment(r,t,y) = 99999;
 *display TotalAnnualMaxCapacityInvestment;
@@ -180,9 +162,3 @@ RETagFuel(r,f,y) = 0;
 REMinProductionTarget(r,y) = 0;
 
 StorageInflectionTimes(y,l,b) = 0;
-
-*end;
-
-* tetsing
-
-*Trade.fx('tokyo','osaka',l,'TRADEDELC','2018') = 1;

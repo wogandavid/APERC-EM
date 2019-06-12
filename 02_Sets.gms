@@ -1,5 +1,6 @@
-* APERC Energy Model 2019.01.02 created by David Wogan, APERC
+* APERC Energy Model 2019.06.12 created by David Wogan, APERC
 *
+
 * Based on OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
 
 * This file declares all sets and elements used in the model, including all sectors and subsectors.
@@ -9,109 +10,103 @@
 * INSTRUCTIONS
 * 1. When updating a sector model, be sure to add any new sets or elements to this file, in the correct location.
 
-set TECHNOLOGY a list of all processes and activities
+* ===============================================================================
+* TECHNOLOGIES
+Sets
+* Production sector
+PRD_tech "production sector technologies"
 /
-* 1. Production
-$ontext 
-IMPCOAL1 - import coal
-IMPOIL1 - import oil
-IMPNATGAS - import natural gas
-IMPURANIUM1 - import uranium
-IMPDSL1 - import diesel
-IMPGSL1 - import gasoline
-IMPCOAL1 - import coal
-$offtext
-IMPOIL1
-IMPNATGAS
-IMPURANIUM1
-IMPDSL1
-IMPGSL1
-* 2. Refining
-* SRE basic refining input-output process
-SRE
-* 3. Power
-* power generation technologies
-$ontext 
- ELCOAL coal-fired plant
- ELNUKE nuclear plant
- ELNATGAS natural gas plant
- ELHYD hydro dam
- ELDAM Consumes and generates electricity
- RIV supplies water to hydro power plants
-$offtext
- ELCOAL
- ELNUKE
- ELNATGAS
- ELHYD
- ELDAM
- RIV
+IMPCOAL1 "import coal"
+IMPOIL1 "import oil"
+IMPNATGAS "import gas"
+IMPURANIUM1 "import uranium"
+IMPDSL1 "import diesel fuel"
+IMPGSL1 "import gasoline"
+/
+* Refining sector
+REF_tech "refining sector technologies"
+/
+SRE "refining activity"
+/
+* Power sector
+POW_tech
+/
+* power plants
+ ELCOAL "coal power plant"
+ ELNUKE "nuclear power plant"
+ ELNATGAS "natural gas power plant"
+ ELHYD "hydro power plant"
+ ELDAM "storage"
+ RIV "produces water for power plant"
 * transmission
-$ontext
- HVTexp export to high voltage line
- HVTimp import from high voltage line
- HVTu backstop high voltage technology 
-$offtext
- HVTexp
- HVTimp
- HVTu
-* 4. Hydrogen
-
-* 5. Buildings
-$ontext
-RHO residential heating - oil units []
-RHE residential heating - electricity units []
-RL1 residential lighting - technology 1 units []
-RHu - backstop technology for heating
-RLu - backstop technology for lighting
-$offtext
-RHO
-RHE
-RL1
-RHu
-RLu
-* 6. Transport
-$ontext
-TRND diesel vehicle
-TRNE electric vehicle
-TRNG gasoline vehicle
-TRNu backstop vehicle technology
-$offtext
-TRND
-TRNE
-TRNG
-TRNu
+ HVTexp "export to high voltage activity"
+ HVTimp "import from high voltage activity"
+ HVTu "backstop transmission technology"
+/
+* Hydrogen 'sector'
+* Buildings
+BLD_tech
+/
+RHO "residential heating - oil"
+RHE "residential heating - electricity"
+RL1 "residential lighting - technology "
+RHu - "backstop technology for heating"
+RLu - "backstop technology for lighting"
+/
+* Transport
+TRN_tech
+/
+TRND "diesel vehicle"
+TRNE "electric vehicle"
+TRNG "gasoline vehicle"
+TRNu "backstop vehicle technology"
+/
 * 7. Industry
-
+*IND_tech
 * 8. Agriculture
-/;
+*AGR_tech
+* aggregate all sector sets into one TECHNOLOGY set to match OSeMOSYS structure
+set TECHNOLOGY a list of all processes and activities
+/set.PRD_tech, set.REF_tech, set.POW_tech, set.BLD_tech, set.TRN_tech/
+;
 
-set FUEL / 
-* 1. Production
-URANIUM, COAL, OIL, NATGAS, HYD,
-* 2. Refining
-DSL, GSL, 
-* 3. Power
-ELC, ELCtrade,
-* 4. Hydrogen
+* ===============================================================================
+* FUELS
+Sets
+* Production sector
+PRD_fuel /URANIUM, COAL, OIL, NATGAS, HYD/
+* Refining sector
+REF_fuel /DSL, GSL/
+* Power sector
+POW_fuel /ELC, ELCtrade/
+* Buildings sector
+BLD_fuel /RH, RL/
+* Transport sector
+TRN_fuel /TRN/
+* Industry sector
+*IND_fuel //
+* Agriculture sector
+*AGR_fuel //
+* Other fuels
+OTH_fuel /DUMMYF/
+* aggregate all sector sets into one TECHNOLOGY set to match OSeMOSYS structure
+FUEL a list of all fuels and flows
+/set.PRD_fuel,REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
+*IND_fuel,
+*AGR_fuel,OTH_fuel
+/
+;
 
-* 5. Buildings
-RH, RL, 
-* 6. Transport
-TRN, 
-* 7. Industry
-
-* 8. Agriculture
-
-* 9. Other
- DUMMYF 
- /;
+* ===============================================================================
+* OTHERS
 
 * list of economies in model
-set ECONOMY  / tokyo, OSAKA /;
+set ECONOMY  /tokyo, osaka/;
 
 * list of years in model
-set YEAR /2018*2030/;
+set YEAR /2018*2020/;
 YearVal(YEAR) = 2018+ord(YEAR)-1;
+parameter StartYear / 2018 /;
 
 * list of timeslices in model
 set TIMESLICE       / ID, IN, SD, SN, WD, WN /;

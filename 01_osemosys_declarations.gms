@@ -44,13 +44,12 @@ parameter StartYear;
 parameter YearSplit(TIMESLICE,YEAR);
 parameter DiscountRate(ECONOMY,TECHNOLOGY);
 parameter TradeRoute(ECONOMY,ECONOMY2,FUEL,YEAR);
+*parameter TradeRoute(ECONOMY,ECONOMY2,FUEL,YEAR);
 *
 * ####### Demands #############
 *
 parameter SpecifiedAnnualDemand(ECONOMY,FUEL,YEAR);
 parameter SpecifiedDemandProfile(ECONOMY,FUEL,TIMESLICE,YEAR);
-positive variable RateOfDemand(YEAR,TIMESLICE,FUEL,ECONOMY);
-positive variable Demand(YEAR,TIMESLICE,FUEL,ECONOMY);
 parameter AccumulatedAnnualDemand(ECONOMY,FUEL,YEAR);
 *
 * ######## Technology #############
@@ -153,6 +152,8 @@ positive variable Use(YEAR,TIMESLICE,FUEL,ECONOMY);
 positive variable ProductionAnnual(YEAR,FUEL,ECONOMY);
 positive variable UseAnnual(YEAR,FUEL,ECONOMY);
 *
+positive variable RateOfDemand(YEAR,TIMESLICE,FUEL,ECONOMY);
+positive variable Demand(YEAR,TIMESLICE,FUEL,ECONOMY);
 
 * infeasible if declared as positive variable
 variable Trade(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR);

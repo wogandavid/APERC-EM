@@ -25,6 +25,7 @@ $include 02_sets.gms
 * 2. move the data file to your sector folder
 * 3. change the path to your folder.
 $include 02a_data_import.gms
+
 *
 * define model equations
 $offlisting
