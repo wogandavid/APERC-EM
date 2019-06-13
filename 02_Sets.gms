@@ -119,7 +119,7 @@ TRN_fuel /TRN/
 * Other fuels
 OTH_fuel /DUMMYF/
 * aggregate all sector sets into one ACTIVITY set to match OSeMOSYS structure
-FUEL a list of all fuels and flows
+FLOW a list of all fuels and flows
 /set.PRD_fuel,REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
 *IND_fuel,
 *AGR_fuel,OTH_fuel

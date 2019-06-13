@@ -22,8 +22,8 @@ set ACTIVITY;
 alias (a,ACTIVITY);
 set TIMESLICE;
 alias (l,TIMESLICE);
-set FUEL;
-alias (f,FUEL);
+set FLOW;
+alias (f,FLOW);
 set EMISSION;
 alias (ghg,EMISSION);
 set MODE_OF_OPERATION;
@@ -44,14 +44,14 @@ alias (s,STORAGE);
 parameter StartYear;
 parameter YearSplit(TIMESLICE,YEAR);
 parameter DiscountRate(ECONOMY,ACTIVITY);
-parameter TradeRoute(ECONOMY,ECONOMY2,FUEL,YEAR);
-*parameter TradeRoute(ECONOMY,ECONOMY2,FUEL,YEAR);
+parameter TradeRoute(ECONOMY,ECONOMY2,FLOW,YEAR);
+*parameter TradeRoute(ECONOMY,ECONOMY2,FLOW,YEAR);
 *
 * ####### Demands #############
 *
-parameter SpecifiedAnnualDemand(ECONOMY,FUEL,YEAR);
-parameter SpecifiedDemandProfile(ECONOMY,FUEL,TIMESLICE,YEAR);
-parameter AccumulatedAnnualDemand(ECONOMY,FUEL,YEAR);
+parameter SpecifiedAnnualDemand(ECONOMY,FLOW,YEAR);
+parameter SpecifiedDemandProfile(ECONOMY,FLOW,TIMESLICE,YEAR);
+parameter AccumulatedAnnualDemand(ECONOMY,FLOW,YEAR);
 *
 * ######## Technology #############
 *
@@ -64,8 +64,8 @@ parameter AvailabilityFactor(ECONOMY,ACTIVITY,YEAR);
 parameter OperationalLife(ECONOMY,ACTIVITY);
 parameter ResidualCapacity(ECONOMY,ACTIVITY,YEAR);
 parameter SalvageFactor(ECONOMY,ACTIVITY,YEAR);
-parameter InputActivityRatio(ECONOMY,ACTIVITY,FUEL,MODE_OF_OPERATION,YEAR);
-parameter OutputActivityRatio(ECONOMY,ACTIVITY,FUEL,MODE_OF_OPERATION,YEAR);
+parameter InputActivityRatio(ECONOMY,ACTIVITY,FLOW,MODE_OF_OPERATION,YEAR);
+parameter OutputActivityRatio(ECONOMY,ACTIVITY,FLOW,MODE_OF_OPERATION,YEAR);
 *
 * ######## Technology Costs #############
 *
@@ -101,13 +101,13 @@ parameter TotalTechnologyModelPeriodActivityLowerLimit(ECONOMY,ACTIVITY);
 * ######## Reserve Margin ############
 *
 parameter ReserveMarginTagTechnology(ECONOMY,ACTIVITY,YEAR);
-parameter ReserveMarginTagFuel(ECONOMY,FUEL,YEAR);
+parameter ReserveMarginTagFUEL(ECONOMY,FLOW,YEAR);
 parameter ReserveMargin(ECONOMY,YEAR);
 *
 * ######## RE Generation Target ############
 *
 parameter RETagTechnology(ECONOMY,ACTIVITY,YEAR);
-parameter RETagFuel(ECONOMY,FUEL,YEAR);
+parameter RETagFUEL(ECONOMY,FLOW,YEAR);
 parameter REMinProductionTarget(ECONOMY,YEAR);
 *
 * ######### Emissions & Penalties #############
@@ -137,28 +137,28 @@ positive variable RateOfActivity(YEAR2,TIMESLICE,ACTIVITY,MODE_OF_OPERATION,ECON
 positive variable RateOfTotalActivity(YEAR2,TIMESLICE,ACTIVITY,ECONOMY);
 positive variable TotalTechnologyAnnualActivity(YEAR2,ACTIVITY,ECONOMY);
 positive variable TotalAnnualTechnologyActivityByMode(YEAR2,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
-positive variable RateOfProductionByTechnologyByMode(YEAR2,TIMESLICE,ACTIVITY,MODE_OF_OPERATION,FUEL,ECONOMY);
-positive variable RateOfProductionByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
-positive variable ProductionByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
-positive variable ProductionByTechnologyAnnual(YEAR2,ACTIVITY,FUEL,ECONOMY);
-positive variable RateOfProduction(YEAR2,TIMESLICE,FUEL,ECONOMY);
-positive variable Production(YEAR2,TIMESLICE,FUEL,ECONOMY);
-positive variable RateOfUseByTechnologyByMode(YEAR2,TIMESLICE,ACTIVITY,MODE_OF_OPERATION,FUEL,ECONOMY);
-positive variable RateOfUseByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
-positive variable UseByTechnologyAnnual(YEAR2,ACTIVITY,FUEL,ECONOMY);
-positive variable RateOfUse(YEAR2,TIMESLICE,FUEL,ECONOMY);
-positive variable UseByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
-positive variable Use(YEAR2,TIMESLICE,FUEL,ECONOMY);
+positive variable RateOfProductionByTechnologyByMode(YEAR2,TIMESLICE,ACTIVITY,MODE_OF_OPERATION,FLOW,ECONOMY);
+positive variable RateOfProductionByTechnology(YEAR2,TIMESLICE,ACTIVITY,FLOW,ECONOMY);
+positive variable ProductionByTechnology(YEAR2,TIMESLICE,ACTIVITY,FLOW,ECONOMY);
+positive variable ProductionByTechnologyAnnual(YEAR2,ACTIVITY,FLOW,ECONOMY);
+positive variable RateOfProduction(YEAR2,TIMESLICE,FLOW,ECONOMY);
+positive variable Production(YEAR2,TIMESLICE,FLOW,ECONOMY);
+positive variable RateOfUseByTechnologyByMode(YEAR2,TIMESLICE,ACTIVITY,MODE_OF_OPERATION,FLOW,ECONOMY);
+positive variable RateOfUseByTechnology(YEAR2,TIMESLICE,ACTIVITY,FLOW,ECONOMY);
+positive variable UseByTechnologyAnnual(YEAR2,ACTIVITY,FLOW,ECONOMY);
+positive variable RateOfUse(YEAR2,TIMESLICE,FLOW,ECONOMY);
+positive variable UseByTechnology(YEAR2,TIMESLICE,ACTIVITY,FLOW,ECONOMY);
+positive variable Use(YEAR2,TIMESLICE,FLOW,ECONOMY);
 *
-positive variable ProductionAnnual(YEAR2,FUEL,ECONOMY);
-positive variable UseAnnual(YEAR2,FUEL,ECONOMY);
+positive variable ProductionAnnual(YEAR2,FLOW,ECONOMY);
+positive variable UseAnnual(YEAR2,FLOW,ECONOMY);
 *
-positive variable RateOfDemand(YEAR2,TIMESLICE,FUEL,ECONOMY);
-positive variable Demand(YEAR2,TIMESLICE,FUEL,ECONOMY);
+positive variable RateOfDemand(YEAR2,TIMESLICE,FLOW,ECONOMY);
+positive variable Demand(YEAR2,TIMESLICE,FLOW,ECONOMY);
 
 * infeasible if declared as positive variable
-variable Trade(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR2);
-variable TradeAnnual(ECONOMY,ECONOMY2,FUEL,YEAR2);
+variable Trade(ECONOMY,ECONOMY2,TIMESLICE,FLOW,YEAR2);
+variable TradeAnnual(ECONOMY,ECONOMY2,FLOW,YEAR2);
 *
 *
 * ############### Costing Variables #############

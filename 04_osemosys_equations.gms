@@ -19,7 +19,7 @@ cost.. z =e= sum((y,a,r), TotalDiscountedCost(y,a,r));
 * ####################
 * # Constraints #
 * ####################
-equation EQ_SpecifiedDemand1(YEAR2,TIMESLICE,FUEL,ECONOMY);
+equation EQ_SpecifiedDemand1(YEAR2,TIMESLICE,FLOW,ECONOMY);
 EQ_SpecifiedDemand1(y,l,f,r).. SpecifiedAnnualDemand(r,f,y)*SpecifiedDemandProfile(r,f,l,y) / YearSplit(l,y) =e= RateOfDemand(y,l,f,r);
 *
 * ############### Storage #############
@@ -65,61 +65,61 @@ CBb1_PlannedMaintenance(y,a,r).. sum(l, RateOfTotalActivity(y,l,a,r)*YearSplit(l
 * ##############* Energy Balance A #############
 *
 * #### This first set of equations computes 'fuel' production ####
-equation EBa1_RateOfFuelProduction1(YEAR2,TIMESLICE,FUEL,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
+equation EBa1_RateOfFuelProduction1(YEAR2,TIMESLICE,FLOW,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
 EBa1_RateOfFuelProduction1(y,l,f,a,m,r).. RateOfActivity(y,l,a,m,r)*OutputActivityRatio(r,a,f,m,y) =e= RateOfProductionByTechnologyByMode(y,l,a,m,f,r);
 
-equation EBa2_RateOfFuelProduction2(YEAR2,TIMESLICE,FUEL,ACTIVITY,ECONOMY);
+equation EBa2_RateOfFuelProduction2(YEAR2,TIMESLICE,FLOW,ACTIVITY,ECONOMY);
 EBa2_RateOfFuelProduction2(y,l,f,a,r).. sum(m, RateOfProductionByTechnologyByMode(y,l,a,m,f,r)) =e= RateOfProductionByTechnology(y,l,a,f,r);
 
-equation EBa3_RateOfFuelProduction3(YEAR2,TIMESLICE,FUEL,ECONOMY);
+equation EBa3_RateOfFuelProduction3(YEAR2,TIMESLICE,FLOW,ECONOMY);
 EBa3_RateOfFuelProduction3(y,l,f,r).. sum(a, RateOfProductionByTechnology(y,l,a,f,r)) =e= RateOfProduction(y,l,f,r);
 
 * #### This set of equations computes 'fuel' consumption ####
-equation EBa4_RateOfFuelUse1(YEAR2,TIMESLICE,FUEL,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
+equation EBa4_RateOfFuelUse1(YEAR2,TIMESLICE,FLOW,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
 EBa4_RateOfFuelUse1(y,l,f,a,m,r).. RateOfActivity(y,l,a,m,r)*InputActivityRatio(r,a,f,m,y) =e= RateOfUseByTechnologyByMode(y,l,a,m,f,r);
 
-equation EBa5_RateOfFuelUse2(YEAR2,TIMESLICE,FUEL,ACTIVITY,ECONOMY);
+equation EBa5_RateOfFuelUse2(YEAR2,TIMESLICE,FLOW,ACTIVITY,ECONOMY);
 EBa5_RateOfFuelUse2(y,l,f,a,r).. sum(m, RateOfUseByTechnologyByMode(y,l,a,m,f,r)) =e= RateOfUseByTechnology(y,l,a,f,r);
 
-equation EBa6_RateOfFuelUse3(YEAR2,TIMESLICE,FUEL,ECONOMY);
+equation EBa6_RateOfFuelUse3(YEAR2,TIMESLICE,FLOW,ECONOMY);
 EBa6_RateOfFuelUse3(y,l,f,r).. sum(a, RateOfUseByTechnology(y,l,a,f,r)) =e= RateOfUse(y,l,f,r);
 
 * #### These equations perform supply and demand balance
-equation EBa7_EnergyBalanceEachTS1(YEAR2,TIMESLICE,FUEL,ECONOMY);
+equation EBa7_EnergyBalanceEachTS1(YEAR2,TIMESLICE,FLOW,ECONOMY);
 EBa7_EnergyBalanceEachTS1(y,l,f,r).. RateOfProduction(y,l,f,r)*YearSplit(l,y) =e= Production(y,l,f,r);
 
-equation EBa8_EnergyBalanceEachTS2(YEAR2,TIMESLICE,FUEL,ECONOMY);
+equation EBa8_EnergyBalanceEachTS2(YEAR2,TIMESLICE,FLOW,ECONOMY);
 EBa8_EnergyBalanceEachTS2(y,l,f,r).. RateOfUse(y,l,f,r)*YearSplit(l,y) =e= Use(y,l,f,r);
 
-equation EBa9_EnergyBalanceEachTS3(YEAR2,TIMESLICE,FUEL,ECONOMY);
+equation EBa9_EnergyBalanceEachTS3(YEAR2,TIMESLICE,FLOW,ECONOMY);
 EBa9_EnergyBalanceEachTS3(y,l,f,r).. RateOfDemand(y,l,f,r)*YearSplit(l,y) =e= Demand(y,l,f,r);
 
-equation EBa10_EnergyBalanceEachTS4(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR2);
+equation EBa10_EnergyBalanceEachTS4(ECONOMY,ECONOMY2,TIMESLICE,FLOW,YEAR2);
 EBa10_EnergyBalanceEachTS4(r,rr,l,f,y).. Trade(r,rr,l,f,y) =e= -Trade(rr,r,l,f,y);
 
-equation EBa11_EnergyBalanceEachTS5(YEAR2,TIMESLICE,FUEL,ECONOMY);
+equation EBa11_EnergyBalanceEachTS5(YEAR2,TIMESLICE,FLOW,ECONOMY);
 EBa11_EnergyBalanceEachTS5(y,l,f,r).. Production(y,l,f,r) =g= Demand(y,l,f,r) + Use(y,l,f,r) + sum(rr,Trade(r,rr,l,f,y)*TradeRoute(r,rr,f,y));
 *
 * ##############* Energy Balance B #############
 *
-equation EBb1_EnergyBalanceEachYear1(YEAR2,FUEL,ECONOMY);
+equation EBb1_EnergyBalanceEachYear1(YEAR2,FLOW,ECONOMY);
 EBb1_EnergyBalanceEachYear1(y,f,r).. sum(l, Production(y,l,f,r)) =e= ProductionAnnual(y,f,r);
 
-equation EBb2_EnergyBalanceEachYear2(YEAR2,FUEL,ECONOMY);
+equation EBb2_EnergyBalanceEachYear2(YEAR2,FLOW,ECONOMY);
 EBb2_EnergyBalanceEachYear2(y,f,r).. sum(l, Use(y,l,f,r)) =e= UseAnnual(y,f,r);
 
-equation EBb3_EnergyBalanceEachYear3(ECONOMY,ECONOMY2,FUEL,YEAR2);
+equation EBb3_EnergyBalanceEachYear3(ECONOMY,ECONOMY2,FLOW,YEAR2);
 EBb3_EnergyBalanceEachYear3(r,rr,f,y).. sum(l,Trade(r,rr,l,f,y)*TradeRoute(r,rr,f,y)) =e= TradeAnnual(r,rr,f,y);
 
-equation EBb4_EnergyBalanceEachYear4(YEAR2,FUEL,ECONOMY);
+equation EBb4_EnergyBalanceEachYear4(YEAR2,FLOW,ECONOMY);
 EBb4_EnergyBalanceEachYear4(y,f,r).. ProductionAnnual(y,f,r) =g= UseAnnual(y,f,r) + sum(rr,TradeAnnual(r,rr,f,y)*TradeRoute(r,rr,f,y)) + AccumulatedAnnualDemand(r,f,y);
 *
 * ##############* Accounting Technology Production/Use #############
 *
-equation Acc1_FuelProductionByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
+equation Acc1_FuelProductionByTechnology(YEAR2,TIMESLICE,ACTIVITY,FLOW,ECONOMY);
 Acc1_FuelProductionByTechnology(y,l,a,f,r).. RateOfProductionByTechnology(y,l,a,f,r) * YearSplit(l,y) =e= ProductionByTechnology(y,l,a,f,r);
 
-equation Acc2_FuelUseByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
+equation Acc2_FuelUseByTechnology(YEAR2,TIMESLICE,ACTIVITY,FLOW,ECONOMY);
 Acc2_FuelUseByTechnology(y,l,a,f,r).. RateOfUseByTechnology(y,l,a,f,r) * YearSplit(l,y) =e= UseByTechnology(y,l,a,f,r);
 
 equation Acc3_AverageAnnualRateOfActivity(YEAR2,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
@@ -225,7 +225,7 @@ RM3_ReserveMargin_Constraint(y,l,r).. DemandNeedingReserveMargin(y,l,r) * Reserv
 *
 * ############### RE Production Target #############* NTS: Should change demand for production
 *
-equation RE1_FuelProductionByTechnologyAnnual(YEAR2,ACTIVITY,FUEL,ECONOMY);
+equation RE1_FuelProductionByTechnologyAnnual(YEAR2,ACTIVITY,FLOW,ECONOMY);
 RE1_FuelProductionByTechnologyAnnual(y,a,f,r).. sum(l, ProductionByTechnology(y,l,a,f,r)) =e= ProductionByTechnologyAnnual(y,a,f,r);
 
 equation RE2_TechIncluded(YEAR,ECONOMY);
@@ -237,7 +237,7 @@ RE3_FuelIncluded(y,r).. sum((l,f), (RateOfDemand(y,l,f,r)*YearSplit(l,y)*RETagFu
 equation RE4_EnergyConstraint(YEAR2,ECONOMY);
 RE4_EnergyConstraint(y,r).. REMinProductionTarget(r,y)*RETotalDemandOfTargetFuelAnnual(y,r) =l= TotalREProductionAnnual(y,r);
 
-equation RE5_FuelUseByTechnologyAnnual(YEAR2,ACTIVITY,FUEL,ECONOMY);
+equation RE5_FuelUseByTechnologyAnnual(YEAR2,ACTIVITY,FLOW,ECONOMY);
 RE5_FuelUseByTechnologyAnnual(y,a,f,r).. sum(l, (RateOfUseByTechnology(y,l,a,f,r)*YearSplit(l,y))) =e= UseByTechnologyAnnual(y,a,f,r);
 *
 * ################ Emissions Accounting ##############
