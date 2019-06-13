@@ -74,37 +74,37 @@ StorageLowerLimit(r,s) = 0;
 *display StorageUpperLimit;
 * display StorageLowerLimit;
 
-DiscountRate(r,t) = 0.05;
+DiscountRate(r,a) = 0.05;
 *display DiscountRate;
 
 parameter TechnologyToStorage /
-  AUS.ELDAM.DAM.2  1
+  AUS.POWDAM.DAM.2  1
 /;
 *display TechnologyToStorage;
 
 parameter TechnologyFromStorage /
-  AUS.ELDAM.DAM.1  1
+  AUS.POWDAM.DAM.1  1
 /;
 
-VariableCost(r,t,m,y)$(VariableCost(r,t,m,y) = 0) = 0.00041868;
+VariableCost(r,a,m,y)$(VariableCost(r,a,m,y) = 0) = 0.00041868;
 
-AvailabilityFactor(r,t,y)$(AvailabilityFactor(r,t,y) = 0) = 1;
+AvailabilityFactor(r,a,y)$(AvailabilityFactor(r,a,y) = 0) = 1;
 
-CapacityFactor(r,t,y)$(CapacityFactor(r,t,y) = 0) = 1;
+CapacityFactor(r,a,y)$(CapacityFactor(r,a,y) = 0) = 1;
 
 * Capacity to Activity Unit:
 * energy produced when one unit of capacity is fully used in one year
 * 0.753224421 is the level of energy production in Mtoe produced from 1 GW operating for 1 year
-CapacityToActivityUnit(r,t)$(CapacityToActivityUnit(r,t) = 0) = 1;
+CapacityToActivityUnit(r,a)$(CapacityToActivityUnit(r,a) = 0) = 1;
 *display CapacityToActivityUnit;
 
 parameter TechWithCapacityNeededToMeetPeakTS /
-  AUS.ELCOAL    1
-  AUS.ELNUKE    1
-  AUS.ELNATGAS  1
-  AUS.ELHYD     1
-  AUS.ELDAM     1
-  ROW.ELCOAL    0
+  AUS.POWCOAL    1
+  AUS.POWNUKE    1
+  AUS.POWNATGAS  1
+  AUS.POWHYD     1
+  AUS.POWDAM     1
+  ROW.POWCOAL    0
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 
@@ -119,27 +119,27 @@ parameter ReserveMarginTagFuel /
 /;
 *display ReserveMarginTagFuel;
 
-OperationalLife(r,t)$(OperationalLife(r,t) = 0) = 1;
+OperationalLife(r,a)$(OperationalLife(r,a) = 0) = 1;
 *display OperationalLife;
 
-TotalAnnualMaxCapacity(r,t,y)$(TotalAnnualMaxCapacity(r,t,y) = 0) = 99999;
+TotalAnnualMaxCapacity(r,a,y)$(TotalAnnualMaxCapacity(r,a,y) = 0) = 99999;
 
-TotalAnnualMaxCapacityInvestment(r,t,y) = 99999;
+TotalAnnualMaxCapacityInvestment(r,a,y) = 99999;
 *display TotalAnnualMaxCapacityInvestment;
 
-TotalAnnualMinCapacityInvestment(r,t,y) = 0;
+TotalAnnualMinCapacityInvestment(r,a,y) = 0;
 
-TotalTechnologyAnnualActivityUpperLimit(r,t,y) = 99999;
+TotalTechnologyAnnualActivityUpperLimit(r,a,y) = 99999;
 *display TotalTechnologyAnnualActivityUpperLimit;
 
-TotalTechnologyAnnualActivityLowerLimit(r,t,y) = 0;
+TotalTechnologyAnnualActivityLowerLimit(r,a,y) = 0;
 
-TotalTechnologyModelPeriodActivityUpperLimit(r,t) = 99999;
+TotalTechnologyModelPeriodActivityUpperLimit(r,a) = 99999;
 *display TotalTechnologyModelPeriodActivityUpperLimit;
 
-TotalTechnologyModelPeriodActivityLowerLimit(r,t) = 0;
+TotalTechnologyModelPeriodActivityLowerLimit(r,a) = 0;
 
-RETagTechnology(r,t,y) = 0;
+RETagTechnology(r,a,y) = 0;
 
 RETagFuel(r,f,y) = 0;
 

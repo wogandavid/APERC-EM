@@ -11,285 +11,261 @@
 * # Objective Function #
 * ######################
 *
-*minimize cost: sum(YEAR,TECHNOLOGY,ECONOMY) TotalDiscountedCost[y,t,r];
+*minimize cost: sum(YEAR,TECHNOLOGY,ECONOMY) TotalDiscountedCost[y,a,r];
 free variable z;
 equation cost;
-cost.. z =e= sum((y,t,r), TotalDiscountedCost(y,t,r));
+cost.. z =e= sum((y,a,r), TotalDiscountedCost(y,a,r));
 *
 * ####################
 * # Constraints #
 * ####################
-*:SpecifiedAnnualDemand[y,f,r]<>0
-*s.t. EQ_SpecifiedDemand1(YEAR,TIMESLICE,FUEL,ECONOMY): SpecifiedAnnualDemand[y,f,r]*SpecifiedDemandProfile[y,l,f,r] / YearSplit[y,l]=RateOfDemand[y,l,f,r];
 equation EQ_SpecifiedDemand1(YEAR2,TIMESLICE,FUEL,ECONOMY);
 EQ_SpecifiedDemand1(y,l,f,r).. SpecifiedAnnualDemand(r,f,y)*SpecifiedDemandProfile(r,f,l,y) / YearSplit(l,y) =e= RateOfDemand(y,l,f,r);
 *
 * ############### Storage #############
 *
-*s.t. S1_StorageCharge(STORAGE,YEAR,TIMESLICE,ECONOMY): sum(TECHNOLOGY,MODE_OF_OPERATION) RateOfActivity[y,l,t,m,r] * TechnologyToStorage[t,m,s,r] * YearSplit[y,l] = StorageCharge[s,y,l,r];
 equation S1_StorageCharge(STORAGE,YEAR2,TIMESLICE,ECONOMY);
-S1_StorageCharge(s,y,l,r).. sum((t,m), (RateOfActivity(y,l,t,m,r) * TechnologyToStorage(r,t,s,m))) * YearSplit(l,y) =e= StorageCharge(s,y,l,r);
-*s.t. S2_StorageDischarge(STORAGE,YEAR,TIMESLICE,ECONOMY): sum(TECHNOLOGY,MODE_OF_OPERATION) RateOfActivity[y,l,t,m,r] * TechnologyFromStorage[t,m,s,r] * YearSplit[y,l] = StorageDischarge[s,y,l,r];
+S1_StorageCharge(s,y,l,r).. sum((a,m), (RateOfActivity(y,l,a,m,r) * TechnologyToStorage(r,a,s,m))) * YearSplit(l,y) =e= StorageCharge(s,y,l,r);
+
 equation S2_StorageDischarge(STORAGE,YEAR2,TIMESLICE,ECONOMY);
-S2_StorageDischarge(s,y,l,r).. sum((t,m), (RateOfActivity(y,l,t,m,r) * TechnologyFromStorage(r,t,s,m))) * YearSplit(l,y) =e= StorageDischarge(s,y,l,r);
-*s.t. S3_NetStorageCharge(STORAGE,YEAR,TIMESLICE,ECONOMY): NetStorageCharge[s,y,l,r] = StorageCharge[s,y,l,r] - StorageDischarge[s,y,l,r];
+S2_StorageDischarge(s,y,l,r).. sum((a,m), (RateOfActivity(y,l,a,m,r) * TechnologyFromStorage(r,a,s,m))) * YearSplit(l,y) =e= StorageDischarge(s,y,l,r);
+
 equation S3_NetStorageCharge(STORAGE,YEAR2,TIMESLICE,ECONOMY);
 S3_NetStorageCharge(s,y,l,r).. NetStorageCharge(s,y,l,r) =e= StorageCharge(s,y,l,r) - StorageDischarge(s,y,l,r);
-*s.t. S4_StorageLevelAtInflection(BOUNDARY_INSTANCES,STORAGE,ECONOMY): sum(TIMESLICE,YEAR) NetStorageCharge[s,y,l,r]/YearSplit[y,l]*StorageInflectionTimes[y,l,b] = StorageLevel[s,b,r];
+
 equation S4_StorageLevelAtInflection(BOUNDARY_INSTANCES,STORAGE,ECONOMY);
 S4_StorageLevelAtInflection(b,s,r).. sum((l,y), (NetStorageCharge(s,y,l,r)/YearSplit(l,y)*StorageInflectionTimes(y,l,b))) =e= StorageLevel(s,b,r);
-*s.t. S5_StorageLowerLimit(BOUNDARY_INSTANCES,STORAGE,ECONOMY): StorageLevel[s,b,r] >= StorageLowerLimit[s,r];
+
 equation S5_StorageLowerLimit(BOUNDARY_INSTANCES,STORAGE,ECONOMY);
 S5_StorageLowerLimit(b,s,r).. StorageLevel(s,b,r) =g= StorageLowerLimit(r,s);
-*s.t. S6_StorageUpperLimit(BOUNDARY_INSTANCES,STORAGE,ECONOMY): StorageLevel[s,b,r] <= StorageUpperLimit[s,r];
+
 equation S6_StorageUpperLimit(BOUNDARY_INSTANCES,STORAGE,ECONOMY);
 S6_StorageUpperLimit(b,s,r).. StorageLevel(s,b,r) =l= StorageUpperLimit(r,s);
 *
 * ############### Capacity Adequacy A #############
 *
-*s.t. CBa1_TotalNewCapacity{y in YEAR, t in TECHNOLOGY, r in ECONOMY}:AccumulatedNewCapacity[y,t,r] = sum{yy in YEAR: y-yy < OperationalLife[t,r] && y-yy>=0} NewCapacity[yy,t,r];
-equation CBa1_TotalNewCapacity(YEAR2,TECHNOLOGY,ECONOMY);
-CBa1_TotalNewCapacity(y,t,r).. AccumulatedNewCapacity(y,t,r) =e= sum(yy$((YearVal(y)-YearVal(yy) < OperationalLife(r,t)) AND (YearVal(y)-YearVal(yy) >= 0)), NewCapacity(yy,t,r));
-*s.t. CBa2_TotalAnnualCapacity(YEAR,TECHNOLOGY,ECONOMY): AccumulatedNewCapacity[y,t,r]+ ResidualCapacity[y,t,r] = TotalCapacityAnnual[y,t,r];
-equation CBa2_TotalAnnualCapacity(YEAR2,TECHNOLOGY,ECONOMY);
-CBa2_TotalAnnualCapacity(y,t,r).. AccumulatedNewCapacity(y,t,r)+ ResidualCapacity(r,t,y) =e= TotalCapacityAnnual(y,t,r);
-*s.t. CBa3_TotalActivityOfEachTechnology(YEAR,TECHNOLOGY,TIMESLICE,ECONOMY): sum(MODE_OF_OPERATION) RateOfActivity[y,l,t,m,r] = RateOfTotalActivity[y,l,t,r];
-equation CBa3_TotalActivityOfEachTechnology(YEAR2,TECHNOLOGY,TIMESLICE,ECONOMY);
-CBa3_TotalActivityOfEachTechnology(y,t,l,r).. sum(m, RateOfActivity(y,l,t,m,r)) =e= RateOfTotalActivity(y,l,t,r);
-*s.t. CBa4_Constraint_Capacity(YEAR,TIMESLICE,TECHNOLOGY,ECONOMY: TechWithCapacityNeededToMeetPeakTS[t,r]<>0): RateOfTotalActivity[y,l,t,r] <= TotalCapacityAnnual[y,t,r] * CapacityFactor[y,t,r]*CapacityToActivityUnit[t,r];
-equation CBa4_Constraint_Capacity(YEAR2,TIMESLICE,TECHNOLOGY,ECONOMY);
-CBa4_Constraint_Capacity(y,l,t,r)$(TechWithCapacityNeededToMeetPeakTS(r,t) <> 0).. RateOfTotalActivity(y,l,t,r) =l= TotalCapacityAnnual(y,t,r) * CapacityFactor(r,t,y)*CapacityToActivityUnit(r,t);
+equation CBa1_TotalNewCapacity(YEAR2,ACTIVITY,ECONOMY);
+CBa1_TotalNewCapacity(y,a,r).. AccumulatedNewCapacity(y,a,r) =e= sum(yy$((YearVal(y)-YearVal(yy) < OperationalLife(r,a)) AND (YearVal(y)-YearVal(yy) >= 0)), NewCapacity(yy,a,r));
+
+equation CBa2_TotalAnnualCapacity(YEAR2,ACTIVITY,ECONOMY);
+CBa2_TotalAnnualCapacity(y,a,r).. AccumulatedNewCapacity(y,a,r)+ ResidualCapacity(r,a,y) =e= TotalCapacityAnnual(y,a,r);
+
+equation CBa3_TotalActivityOfEachTechnology(YEAR2,ACTIVITY,TIMESLICE,ECONOMY);
+CBa3_TotalActivityOfEachTechnology(y,a,l,r).. sum(m, RateOfActivity(y,l,a,m,r)) =e= RateOfTotalActivity(y,l,a,r);
+
+equation CBa4_Constraint_Capacity(YEAR2,TIMESLICE,ACTIVITY,ECONOMY);
+CBa4_Constraint_Capacity(y,l,a,r)$(TechWithCapacityNeededToMeetPeakTS(r,a) <> 0).. RateOfTotalActivity(y,l,a,r) =l= TotalCapacityAnnual(y,a,r) * CapacityFactor(r,a,y)*CapacityToActivityUnit(r,a);
 * Note that the PlannedMaintenance equation below ensures that all other technologies have a capacity great enough to at least meet the annual average.
 *
 * ############### Capacity Adequacy B #############
 *
-*s.t. CBb1_PlannedMaintenance(YEAR,TECHNOLOGY,ECONOMY): sum(TIMESLICE) RateOfTotalActivity[y,l,t,r]*YearSplit[y,l] <= TotalCapacityAnnual[y,t,r]*CapacityFactor[y,t,r]* AvailabilityFactor[y,t,r]*CapacityToActivityUnit[t,r];
-equation CBb1_PlannedMaintenance(YEAR2,TECHNOLOGY,ECONOMY);
-CBb1_PlannedMaintenance(y,t,r).. sum(l, RateOfTotalActivity(y,l,t,r)*YearSplit(l,y)) =l= TotalCapacityAnnual(y,t,r)*CapacityFactor(r,t,y)* AvailabilityFactor(r,t,y)*CapacityToActivityUnit(r,t);
+equation CBb1_PlannedMaintenance(YEAR2,ACTIVITY,ECONOMY);
+CBb1_PlannedMaintenance(y,a,r).. sum(l, RateOfTotalActivity(y,l,a,r)*YearSplit(l,y)) =l= TotalCapacityAnnual(y,a,r)*CapacityFactor(r,a,y)* AvailabilityFactor(r,a,y)*CapacityToActivityUnit(r,a);
 *
 * ##############* Energy Balance A #############
 *
 * #### This first set of equations computes 'fuel' production ####
-*s.t. EBa1_RateOfFuelProduction1(YEAR,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,ECONOMY): RateOfActivity[y,l,t,m,r]*OutputActivityRatio[y,t,f,m,r] = RateOfProductionByTechnologyByMode[y,l,t,m,f,r];
-equation EBa1_RateOfFuelProduction1(YEAR2,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,ECONOMY);
-EBa1_RateOfFuelProduction1(y,l,f,t,m,r).. RateOfActivity(y,l,t,m,r)*OutputActivityRatio(r,t,f,m,y) =e= RateOfProductionByTechnologyByMode(y,l,t,m,f,r);
-*s.t. EBa2_RateOfFuelProduction2(YEAR,TIMESLICE,FUEL,TECHNOLOGY,ECONOMY): sum(MODE_OF_OPERATION) RateOfProductionByTechnologyByMode[y,l,t,m,f,r] = RateOfProductionByTechnology[y,l,t,f,r];
-equation EBa2_RateOfFuelProduction2(YEAR2,TIMESLICE,FUEL,TECHNOLOGY,ECONOMY);
-EBa2_RateOfFuelProduction2(y,l,f,t,r).. sum(m, RateOfProductionByTechnologyByMode(y,l,t,m,f,r)) =e= RateOfProductionByTechnology(y,l,t,f,r);
-*s.t. EBa3_RateOfFuelProduction3(YEAR,TIMESLICE,FUEL,ECONOMY): sum(TECHNOLOGY) RateOfProductionByTechnology[y,l,t,f,r] = RateOfProduction[y,l,f,r];
+equation EBa1_RateOfFuelProduction1(YEAR2,TIMESLICE,FUEL,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
+EBa1_RateOfFuelProduction1(y,l,f,a,m,r).. RateOfActivity(y,l,a,m,r)*OutputActivityRatio(r,a,f,m,y) =e= RateOfProductionByTechnologyByMode(y,l,a,m,f,r);
+
+equation EBa2_RateOfFuelProduction2(YEAR2,TIMESLICE,FUEL,ACTIVITY,ECONOMY);
+EBa2_RateOfFuelProduction2(y,l,f,a,r).. sum(m, RateOfProductionByTechnologyByMode(y,l,a,m,f,r)) =e= RateOfProductionByTechnology(y,l,a,f,r);
+
 equation EBa3_RateOfFuelProduction3(YEAR2,TIMESLICE,FUEL,ECONOMY);
-EBa3_RateOfFuelProduction3(y,l,f,r).. sum(t, RateOfProductionByTechnology(y,l,t,f,r)) =e= RateOfProduction(y,l,f,r);
+EBa3_RateOfFuelProduction3(y,l,f,r).. sum(a, RateOfProductionByTechnology(y,l,a,f,r)) =e= RateOfProduction(y,l,f,r);
 
 * #### This set of equations computes 'fuel' consumption ####
-*s.t. EBa4_RateOfFuelUse1(YEAR,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,ECONOMY): RateOfActivity[y,l,t,m,r]*InputActivityRatio[y,t,f,m,r] = RateOfUseByTechnologyByMode[y,l,t,m,f,r];
-equation EBa4_RateOfFuelUse1(YEAR2,TIMESLICE,FUEL,TECHNOLOGY,MODE_OF_OPERATION,ECONOMY);
-EBa4_RateOfFuelUse1(y,l,f,t,m,r).. RateOfActivity(y,l,t,m,r)*InputActivityRatio(r,t,f,m,y) =e= RateOfUseByTechnologyByMode(y,l,t,m,f,r);
-*s.t. EBa5_RateOfFuelUse2(YEAR,TIMESLICE,FUEL,TECHNOLOGY,ECONOMY): sum(MODE_OF_OPERATION) RateOfUseByTechnologyByMode[y,l,t,m,f,r] = RateOfUseByTechnology[y,l,t,f,r];
-equation EBa5_RateOfFuelUse2(YEAR2,TIMESLICE,FUEL,TECHNOLOGY,ECONOMY);
-EBa5_RateOfFuelUse2(y,l,f,t,r).. sum(m, RateOfUseByTechnologyByMode(y,l,t,m,f,r)) =e= RateOfUseByTechnology(y,l,t,f,r);
-*s.t. EBa6_RateOfFuelUse3(YEAR,TIMESLICE,FUEL,ECONOMY): sum(TECHNOLOGY) RateOfUseByTechnology[y,l,t,f,r] = RateOfUse[y,l,f,r];
+equation EBa4_RateOfFuelUse1(YEAR2,TIMESLICE,FUEL,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
+EBa4_RateOfFuelUse1(y,l,f,a,m,r).. RateOfActivity(y,l,a,m,r)*InputActivityRatio(r,a,f,m,y) =e= RateOfUseByTechnologyByMode(y,l,a,m,f,r);
+
+equation EBa5_RateOfFuelUse2(YEAR2,TIMESLICE,FUEL,ACTIVITY,ECONOMY);
+EBa5_RateOfFuelUse2(y,l,f,a,r).. sum(m, RateOfUseByTechnologyByMode(y,l,a,m,f,r)) =e= RateOfUseByTechnology(y,l,a,f,r);
+
 equation EBa6_RateOfFuelUse3(YEAR2,TIMESLICE,FUEL,ECONOMY);
-EBa6_RateOfFuelUse3(y,l,f,r).. sum(t, RateOfUseByTechnology(y,l,t,f,r)) =e= RateOfUse(y,l,f,r);
+EBa6_RateOfFuelUse3(y,l,f,r).. sum(a, RateOfUseByTechnology(y,l,a,f,r)) =e= RateOfUse(y,l,f,r);
 
 * #### These equations perform supply and demand balance
-*s.t. EBa7_EnergyBalanceEachTS1(YEAR,TIMESLICE,FUEL,ECONOMY): RateOfProduction[y,l,f,r]*YearSplit[y,l] = Production[y,l,f,r];
 equation EBa7_EnergyBalanceEachTS1(YEAR2,TIMESLICE,FUEL,ECONOMY);
 EBa7_EnergyBalanceEachTS1(y,l,f,r).. RateOfProduction(y,l,f,r)*YearSplit(l,y) =e= Production(y,l,f,r);
-*s.t. EBa8_EnergyBalanceEachTS2(YEAR,TIMESLICE,FUEL,ECONOMY): RateOfUse[y,l,f,r]*YearSplit[y,l] = Use[y,l,f,r];
+
 equation EBa8_EnergyBalanceEachTS2(YEAR2,TIMESLICE,FUEL,ECONOMY);
 EBa8_EnergyBalanceEachTS2(y,l,f,r).. RateOfUse(y,l,f,r)*YearSplit(l,y) =e= Use(y,l,f,r);
-*s.t. EBa9_EnergyBalanceEachTS3(YEAR,TIMESLICE,FUEL,ECONOMY): RateOfDemand[y,l,f,r]*YearSplit[y,l] = Demand[y,l,f,r];
+
 equation EBa9_EnergyBalanceEachTS3(YEAR2,TIMESLICE,FUEL,ECONOMY);
 EBa9_EnergyBalanceEachTS3(y,l,f,r).. RateOfDemand(y,l,f,r)*YearSplit(l,y) =e= Demand(y,l,f,r);
-* s.t. EBa10_EnergyBalanceEachTS4{r in REGION, rr in REGION, l in TIMESLICE, f in FUEL, y in YEAR}: Trade[r,rr,l,f,y] = -Trade[rr,r,l,f,y];
+
 equation EBa10_EnergyBalanceEachTS4(ECONOMY,ECONOMY2,TIMESLICE,FUEL,YEAR2);
 EBa10_EnergyBalanceEachTS4(r,rr,l,f,y).. Trade(r,rr,l,f,y) =e= -Trade(rr,r,l,f,y);
-*s.t. EBa11_EnergyBalanceEachTS5(YEAR,TIMESLICE,FUEL,ECONOMY): Production[r,l,f,y] >= Demand[r,l,f,y] + Use[r,l,f,y] + sum{rr in REGION} Trade[r,rr,l,f,y]*TradeRoute[r,rr,f,y];
+
 equation EBa11_EnergyBalanceEachTS5(YEAR2,TIMESLICE,FUEL,ECONOMY);
 EBa11_EnergyBalanceEachTS5(y,l,f,r).. Production(y,l,f,r) =g= Demand(y,l,f,r) + Use(y,l,f,r) + sum(rr,Trade(r,rr,l,f,y)*TradeRoute(r,rr,f,y));
 *
 * ##############* Energy Balance B #############
 *
-*s.t. EBb1_EnergyBalanceEachYear1(YEAR,FUEL,ECONOMY): sum(TIMESLICE) Production[y,l,f,r] = ProductionAnnual[y,f,r];
 equation EBb1_EnergyBalanceEachYear1(YEAR2,FUEL,ECONOMY);
 EBb1_EnergyBalanceEachYear1(y,f,r).. sum(l, Production(y,l,f,r)) =e= ProductionAnnual(y,f,r);
-*s.t. EBb2_EnergyBalanceEachYear2(YEAR,FUEL,ECONOMY): sum(TIMESLICE) Use[y,l,f,r] = UseAnnual[y,f,r];
+
 equation EBb2_EnergyBalanceEachYear2(YEAR2,FUEL,ECONOMY);
 EBb2_EnergyBalanceEachYear2(y,f,r).. sum(l, Use(y,l,f,r)) =e= UseAnnual(y,f,r);
-*s.t. EBb3_EnergyBalanceEachYear3{r in REGION, rr in REGION, f in FUEL, y in YEAR}: sum{l in TIMESLICE} Trade[r,rr,l,f,y] = TradeAnnual[r,rr,f,y];
+
 equation EBb3_EnergyBalanceEachYear3(ECONOMY,ECONOMY2,FUEL,YEAR2);
 EBb3_EnergyBalanceEachYear3(r,rr,f,y).. sum(l,Trade(r,rr,l,f,y)*TradeRoute(r,rr,f,y)) =e= TradeAnnual(r,rr,f,y);
-*s.t. EBb4_EnergyBalanceEachYear4{r in REGION, f in FUEL, y in YEAR}: ProductionAnnual[r,f,y] >= UseAnnual[r,f,y] + sum{rr in REGION} TradeAnnual[r,rr,f,y]*TradeRoute[r,rr,f,y] + AccumulatedAnnualDemand[r,f,y];
+
 equation EBb4_EnergyBalanceEachYear4(YEAR2,FUEL,ECONOMY);
 EBb4_EnergyBalanceEachYear4(y,f,r).. ProductionAnnual(y,f,r) =g= UseAnnual(y,f,r) + sum(rr,TradeAnnual(r,rr,f,y)*TradeRoute(r,rr,f,y)) + AccumulatedAnnualDemand(r,f,y);
 *
 * ##############* Accounting Technology Production/Use #############
 *
-*s.t. Acc1_FuelProductionByTechnology(YEAR,TIMESLICE,TECHNOLOGY,FUEL,ECONOMY): RateOfProductionByTechnology[y,l,t,f,r] * YearSplit[y,l] = ProductionByTechnology[y,l,t,f,r];
-equation Acc1_FuelProductionByTechnology(YEAR2,TIMESLICE,TECHNOLOGY,FUEL,ECONOMY);
-Acc1_FuelProductionByTechnology(y,l,t,f,r).. RateOfProductionByTechnology(y,l,t,f,r) * YearSplit(l,y) =e= ProductionByTechnology(y,l,t,f,r);
-*s.t. Acc2_FuelUseByTechnology(YEAR,TIMESLICE,TECHNOLOGY,FUEL,ECONOMY): RateOfUseByTechnology[y,l,t,f,r] * YearSplit[y,l] = UseByTechnology[y,l,t,f,r];
-equation Acc2_FuelUseByTechnology(YEAR2,TIMESLICE,TECHNOLOGY,FUEL,ECONOMY);
-Acc2_FuelUseByTechnology(y,l,t,f,r).. RateOfUseByTechnology(y,l,t,f,r) * YearSplit(l,y) =e= UseByTechnology(y,l,t,f,r);
-*s.t. Acc3_AverageAnnualRateOfActivity(YEAR,TECHNOLOGY,MODE_OF_OPERATION,ECONOMY): sum(TIMESLICE) RateOfActivity[y,l,t,m,r]*YearSplit[y,l] = TotalAnnualTechnologyActivityByMode[y,t,m,r];
-equation Acc3_AverageAnnualRateOfActivity(YEAR2,TECHNOLOGY,MODE_OF_OPERATION,ECONOMY);
-Acc3_AverageAnnualRateOfActivity(y,t,m,r).. sum(l, RateOfActivity(y,l,t,m,r)*YearSplit(l,y)) =e= TotalAnnualTechnologyActivityByMode(y,t,m,r);
-*s.t. Acc3_ModelPeriodCostByECONOMY(ECONOMY):sum(YEAR,TECHNOLOGY)TotalDiscountedCost[y,t,r]=ModelPeriodCostByECONOMY[r];
+equation Acc1_FuelProductionByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
+Acc1_FuelProductionByTechnology(y,l,a,f,r).. RateOfProductionByTechnology(y,l,a,f,r) * YearSplit(l,y) =e= ProductionByTechnology(y,l,a,f,r);
+
+equation Acc2_FuelUseByTechnology(YEAR2,TIMESLICE,ACTIVITY,FUEL,ECONOMY);
+Acc2_FuelUseByTechnology(y,l,a,f,r).. RateOfUseByTechnology(y,l,a,f,r) * YearSplit(l,y) =e= UseByTechnology(y,l,a,f,r);
+
+equation Acc3_AverageAnnualRateOfActivity(YEAR2,ACTIVITY,MODE_OF_OPERATION,ECONOMY);
+Acc3_AverageAnnualRateOfActivity(y,a,m,r).. sum(l, RateOfActivity(y,l,a,m,r)*YearSplit(l,y)) =e= TotalAnnualTechnologyActivityByMode(y,a,m,r);
+
 equation Acc3_ModelPeriodCostByECONOMY(ECONOMY);
-Acc3_ModelPeriodCostByECONOMY(r)..sum((y,t), TotalDiscountedCost(y,t,r)) =e= ModelPeriodCostByECONOMY(r);
+Acc3_ModelPeriodCostByECONOMY(r)..sum((y,a), TotalDiscountedCost(y,a,r)) =e= ModelPeriodCostByECONOMY(r);
 *
 * ############### Captial Costs #############
 *
-*s.t. CC1_UndiscountedCapitalInvestment(YEAR,TECHNOLOGY,ECONOMY): CapitalCost[y,t,r] * NewCapacity[y,t,r] = CapitalInvestment[y,t,r];
-equation CC1_UndiscountedCapitalInvestment(YEAR2,TECHNOLOGY,ECONOMY);
-CC1_UndiscountedCapitalInvestment(y,t,r).. CapitalCost(r,t,y) * NewCapacity(y,t,r) =e= CapitalInvestment(y,t,r);
-*s.t. CC2_DiscountingCapitalInvestmenta(YEAR,TECHNOLOGY,ECONOMY): CapitalInvestment[y,t,r]/((1+DiscountRate[t,r])^(y-StartYear)) = DiscountedCapitalInvestment[y,t,r];
-equation CC2_DiscountingCapitalInvestmenta(YEAR2,TECHNOLOGY,ECONOMY);
-CC2_DiscountingCapitalInvestmenta(y,t,r).. CapitalInvestment(y,t,r)/((1+DiscountRate(r,t))**(YearVal(y)-StartYear)) =e= DiscountedCapitalInvestment(y,t,r);
+equation CC1_UndiscountedCapitalInvestment(YEAR2,ACTIVITY,ECONOMY);
+CC1_UndiscountedCapitalInvestment(y,a,r).. CapitalCost(r,a,y) * NewCapacity(y,a,r) =e= CapitalInvestment(y,a,r);
+
+equation CC2_DiscountingCapitalInvestmenta(YEAR2,ACTIVITY,ECONOMY);
+CC2_DiscountingCapitalInvestmenta(y,a,r).. CapitalInvestment(y,a,r)/((1+DiscountRate(r,a))**(YearVal(y)-StartYear)) =e= DiscountedCapitalInvestment(y,a,r);
 *
 * ##############* Salvage Value #############
 *
-*s.t. SV1_SalvageValueAtEndOfPeriod1(YEAR,TECHNOLOGY,ECONOMY: (y + OperationalLife[t,r]-1) > (max(yy in YEAR2) max(yy)) && DiscountRate[t,r]>0): SalvageValue[y,t,r] = CapitalCost[y,t,r]*NewCapacity[y,t,r]*(1-(((1+DiscountRate[t,r])^(max(yy in YEAR) max(yy) - y+1)-1)/((1+DiscountRate[t,r])^OperationalLife[t,r]-1)));
-equation SV1_SalvageValueAtEndOfPeriod1(YEAR2,TECHNOLOGY,ECONOMY);
-SV1_SalvageValueAtEndOfPeriod1(y,t,r)$((YearVal(y) + OperationalLife(r,t)-1 > smax(yy, YearVal(yy))) and (DiscountRate(r,t) > 0))..
-SalvageValue(y,t,r) =e= CapitalCost(r,t,y)*NewCapacity(y,t,r)*(1-(((1+DiscountRate(r,t))**(smax(yy, YearVal(yy)) - YearVal(y)+1) -1)
-/((1+DiscountRate(r,t))**OperationalLife(r,t)-1)));
-*s.t. SV2_SalvageValueAtEndOfPeriod2(YEAR,TECHNOLOGY,ECONOMY: (y + OperationalLife[t,r]-1) > (max(yy in YEAR) max(yy)) && DiscountRate[t,r]=0): SalvageValue[y,t,r] = CapitalCost[y,t,r]*NewCapacity[y,t,r]*(1-(max(yy in YEAR) max(yy) - y+1)/OperationalLife[t,r]);
-equation SV2_SalvageValueAtEndOfPeriod2(YEAR2,TECHNOLOGY,ECONOMY);
-SV2_SalvageValueAtEndOfPeriod2(y,t,r)$((YearVal(y) + OperationalLife(r,t)-1 > smax(yy, YearVal(yy))) and (DiscountRate(r,t) = 0))..
-SalvageValue(y,t,r) =e= CapitalCost(r,t,y)*NewCapacity(y,t,r)*(1-smax(yy, YearVal(yy))- YearVal(y)+1)/OperationalLife(r,t);
-*s.t. SV3_SalvageValueAtEndOfPeriod3(YEAR,TECHNOLOGY,ECONOMY: (y + OperationalLife[t,r]-1) <= (max(yy in YEAR) max(yy))): SalvageValue[y,t,r] = 0;
-equation SV3_SalvageValueAtEndOfPeriod3(YEAR2,TECHNOLOGY,ECONOMY);
-SV3_SalvageValueAtEndOfPeriod3(y,t,r)$(YearVal(y) + OperationalLife(r,t)-1 <= smax(yy, YearVal(yy)))..
-SalvageValue(y,t,r) =e= 0;
-*s.t. SV4_SalvageValueDiscountedToStartYear(YEAR,TECHNOLOGY,ECONOMY): DiscountedSalvageValue[y,t,r] = SalvageValue[y,t,r]/((1+DiscountRate[t,r])^(1+max(yy in YEAR) max(yy)-min(yy in YEAR) min(yy)));
-equation SV4_SalvageValueDiscToStartYr(YEAR2,TECHNOLOGY,ECONOMY);
-SV4_SalvageValueDiscToStartYr(y,t,r)..
-DiscountedSalvageValue(y,t,r) =e= SalvageValue(y,t,r)/((1+DiscountRate(r,t))**(1+smax(yy, YearVal(yy)) - smin(yy, YearVal(yy))));
+equation SV1_SalvageValueAtEndOfPeriod1(YEAR2,ACTIVITY,ECONOMY);
+SV1_SalvageValueAtEndOfPeriod1(y,a,r)$((YearVal(y) + OperationalLife(r,a)-1 > smax(yy, YearVal(yy))) and (DiscountRate(r,a) > 0))..
+SalvageValue(y,a,r) =e= CapitalCost(r,a,y)*NewCapacity(y,a,r)*(1-(((1+DiscountRate(r,a))**(smax(yy, YearVal(yy)) - YearVal(y)+1) -1)
+/((1+DiscountRate(r,a))**OperationalLife(r,a)-1)));
+
+equation SV2_SalvageValueAtEndOfPeriod2(YEAR2,ACTIVITY,ECONOMY);
+SV2_SalvageValueAtEndOfPeriod2(y,a,r)$((YearVal(y) + OperationalLife(r,a)-1 > smax(yy, YearVal(yy))) and (DiscountRate(r,a) = 0))..
+SalvageValue(y,a,r) =e= CapitalCost(r,a,y)*NewCapacity(y,a,r)*(1-smax(yy, YearVal(yy))- YearVal(y)+1)/OperationalLife(r,a);
+
+equation SV3_SalvageValueAtEndOfPeriod3(YEAR2,ACTIVITY,ECONOMY);
+SV3_SalvageValueAtEndOfPeriod3(y,a,r)$(YearVal(y) + OperationalLife(r,a)-1 <= smax(yy, YearVal(yy)))..
+SalvageValue(y,a,r) =e= 0;
+
+equation SV4_SalvageValueDiscToStartYr(YEAR2,ACTIVITY,ECONOMY);
+SV4_SalvageValueDiscToStartYr(y,a,r)..
+DiscountedSalvageValue(y,a,r) =e= SalvageValue(y,a,r)/((1+DiscountRate(r,a))**(1+smax(yy, YearVal(yy)) - smin(yy, YearVal(yy))));
 *
 * ############### Operating Costs #############
 *
-*s.t. OC1_OperatingCostsVariable(YEAR,TIMESLICE,TECHNOLOGY,ECONOMY): sum(MODE_OF_OPERATION) TotalAnnualTechnologyActivityByMode[y,t,m,r]*VariableCost[y,t,m,r] = AnnualVariableOperatingCost[y,t,r];
-* equation OC1_OperatingCostsVariable(YEAR,TIMESLICE,TECHNOLOGY,ECONOMY);
-* OC1_OperatingCostsVariable(y,l,t,r).. sum(m, (TotalAnnualTechnologyActivityByMode(y,t,m,r)*VariableCost(r,t,m,y))) =e= AnnualVariableOperatingCost(y,t,r);
-* TIMESLICE appears in equation (name), but not in equation contents, so equation should be as follows!!
-equation OC1_OperatingCostsVariable(YEAR2,TECHNOLOGY,ECONOMY);
-OC1_OperatingCostsVariable(y,t,r).. sum(m, (TotalAnnualTechnologyActivityByMode(y,t,m,r)*VariableCost(r,t,m,y))) =e= AnnualVariableOperatingCost(y,t,r);
-*s.t. OC2_OperatingCostsFixedAnnual(YEAR,TECHNOLOGY,ECONOMY): TotalCapacityAnnual[y,t,r]*FixedCost[y,t,r] = AnnualFixedOperatingCost[y,t,r];
-equation OC2_OperatingCostsFixedAnnual(YEAR2,TECHNOLOGY,ECONOMY);
-OC2_OperatingCostsFixedAnnual(y,t,r).. TotalCapacityAnnual(y,t,r)*FixedCost(r,t,y) =e= AnnualFixedOperatingCost(y,t,r);
-*s.t. OC3_OperatingCostsTotalAnnual(YEAR,TECHNOLOGY,ECONOMY): AnnualFixedOperatingCost[y,t,r]+AnnualVariableOperatingCost[y,t,r] = OperatingCost[y,t,r];
-equation OC3_OperatingCostsTotalAnnual(YEAR2,TECHNOLOGY,ECONOMY);
-OC3_OperatingCostsTotalAnnual(y,t,r).. AnnualFixedOperatingCost(y,t,r)+AnnualVariableOperatingCost(y,t,r) =e= OperatingCost(y,t,r);
-*s.t. OC4_DiscountedOperatingCostsTotalAnnual{y in YEAR, t in TECHNOLOGY, r in ECONOMY}: OperatingCost[y,t,r]/((1+DiscountRate[t,r])^(y-min{yy in YEAR} min(yy)+0.5)) = DiscountedOperatingCost[y,t,r];
-equation OC4_DiscountedOperatingCostsTotalAnnual(YEAR2,TECHNOLOGY,ECONOMY);
-OC4_DiscountedOperatingCostsTotalAnnual(y,t,r).. OperatingCost(y,t,r)/((1+DiscountRate(r,t))**(YearVal(y)-smin(yy, YearVal(yy))+0.5)) =e= DiscountedOperatingCost(y,t,r);
+equation OC1_OperatingCostsVariable(YEAR2,ACTIVITY,ECONOMY);
+OC1_OperatingCostsVariable(y,a,r).. sum(m, (TotalAnnualTechnologyActivityByMode(y,a,m,r)*VariableCost(r,a,m,y))) =e= AnnualVariableOperatingCost(y,a,r);
+
+equation OC2_OperatingCostsFixedAnnual(YEAR2,ACTIVITY,ECONOMY);
+OC2_OperatingCostsFixedAnnual(y,a,r).. TotalCapacityAnnual(y,a,r)*FixedCost(r,a,y) =e= AnnualFixedOperatingCost(y,a,r);
+
+equation OC3_OperatingCostsTotalAnnual(YEAR2,ACTIVITY,ECONOMY);
+OC3_OperatingCostsTotalAnnual(y,a,r).. AnnualFixedOperatingCost(y,a,r)+AnnualVariableOperatingCost(y,a,r) =e= OperatingCost(y,a,r);
+
+equation OC4_DiscountedOperatingCostsTotalAnnual(YEAR2,ACTIVITY,ECONOMY);
+OC4_DiscountedOperatingCostsTotalAnnual(y,a,r).. OperatingCost(y,a,r)/((1+DiscountRate(r,a))**(YearVal(y)-smin(yy, YearVal(yy))+0.5)) =e= DiscountedOperatingCost(y,a,r);
 * ############### Total Discounted Costs #############
 *
-*s.t. TDC1_TotalDiscountedCostByTechnology(YEAR,TECHNOLOGY,ECONOMY): DiscountedOperatingCost[y,t,r]+DiscountedCapitalInvestment[y,t,r]+DiscountedTechnologyEmissionsPenalty[y,t,r]-DiscountedSalvageValue[y,t,r] = TotalDiscountedCost[y,t,r];
-equation TDC1_TotalDiscountedCostByTechnology(YEAR2,TECHNOLOGY,ECONOMY);
-TDC1_TotalDiscountedCostByTechnology(y,t,r).. DiscountedOperatingCost(y,t,r)+DiscountedCapitalInvestment(y,t,r)+DiscountedTechnologyEmissionsPenalty(y,t,r)-DiscountedSalvageValue(y,t,r) =e= TotalDiscountedCost(y,t,r);
+equation TDC1_TotalDiscountedCostByTechnology(YEAR2,ACTIVITY,ECONOMY);
+TDC1_TotalDiscountedCostByTechnology(y,a,r).. DiscountedOperatingCost(y,a,r)+DiscountedCapitalInvestment(y,a,r)+DiscountedTechnologyEmissionsPenalty(y,a,r)-DiscountedSalvageValue(y,a,r) =e= TotalDiscountedCost(y,a,r);
 *
 * ############### Total Capacity Constraints ##############
 *
-*s.t. TCC1_TotalAnnualMaxCapacityConstraint(YEAR,TECHNOLOGY,ECONOMY: TotalAnnualMaxCapacity[y,t,r]<99999 ): TotalCapacityAnnual[y,t,r] <= TotalAnnualMaxCapacity[y,t,r];
-equation TCC1_TotalAnnualMaxCapacityConstraint(YEAR2,TECHNOLOGY,ECONOMY);
-TCC1_TotalAnnualMaxCapacityConstraint(y,t,r)$(TotalAnnualMaxCapacity(r,t,y) < 99999).. TotalCapacityAnnual(y,t,r) =l= TotalAnnualMaxCapacity(r,t,y);
-*s.t. TCC2_TotalAnnualMinCapacityConstraint(YEAR,TECHNOLOGY,ECONOMY: TotalAnnualMinCapacity[y,t,r]>0): TotalCapacityAnnual[y,t,r] >= TotalAnnualMinCapacity[y,t,r];
-equation TCC2_TotalAnnualMinCapacityConstraint(YEAR2,TECHNOLOGY,ECONOMY);
-TCC2_TotalAnnualMinCapacityConstraint(y,t,r)$(TotalAnnualMinCapacity(r,t,y)>0).. TotalCapacityAnnual(y,t,r) =g= TotalAnnualMinCapacity(r,t,y);
+
+equation TCC1_TotalAnnualMaxCapacityConstraint(YEAR2,ACTIVITY,ECONOMY);
+TCC1_TotalAnnualMaxCapacityConstraint(y,a,r)$(TotalAnnualMaxCapacity(r,a,y) < 99999).. TotalCapacityAnnual(y,a,r) =l= TotalAnnualMaxCapacity(r,a,y);
+
+equation TCC2_TotalAnnualMinCapacityConstraint(YEAR2,ACTIVITY,ECONOMY);
+TCC2_TotalAnnualMinCapacityConstraint(y,a,r)$(TotalAnnualMinCapacity(r,a,y)>0).. TotalCapacityAnnual(y,a,r) =g= TotalAnnualMinCapacity(r,a,y);
 *
 * ############### New Capacity Constraints ##############
 *
-*s.t. NCC1_TotalAnnualMaxNewCapacityConstraint(YEAR,TECHNOLOGY,ECONOMY: TotalAnnualMaxCapacityInvestment[y,t,r]<9999): NewCapacity[y,t,r] <= TotalAnnualMaxCapacityInvestment[y,t,r];
-equation NCC1_TotalAnnualMaxNewCapacityConstraint(YEAR2,TECHNOLOGY,ECONOMY);
-NCC1_TotalAnnualMaxNewCapacityConstraint(y,t,r)$(TotalAnnualMaxCapacityInvestment(r,t,y) < 9999).. NewCapacity(y,t,r) =l= TotalAnnualMaxCapacityInvestment(r,t,y);
-*s.t. NCC2_TotalAnnualMinNewCapacityConstraint(YEAR,TECHNOLOGY,ECONOMY: TotalAnnualMinCapacityInvestment[y,t,r]>0): NewCapacity[y,t,r] >= TotalAnnualMinCapacityInvestment[y,t,r];
-equation NCC2_TotalAnnualMinNewCapacityConstraint(YEAR2,TECHNOLOGY,ECONOMY);
-NCC2_TotalAnnualMinNewCapacityConstraint(y,t,r)$(TotalAnnualMinCapacityInvestment(r,t,y) > 0).. NewCapacity(y,t,r) =g= TotalAnnualMinCapacityInvestment(r,t,y);
+equation NCC1_TotalAnnualMaxNewCapacityConstraint(YEAR2,ACTIVITY,ECONOMY);
+NCC1_TotalAnnualMaxNewCapacityConstraint(y,a,r)$(TotalAnnualMaxCapacityInvestment(r,a,y) < 9999).. NewCapacity(y,a,r) =l= TotalAnnualMaxCapacityInvestment(r,a,y);
+
+equation NCC2_TotalAnnualMinNewCapacityConstraint(YEAR2,ACTIVITY,ECONOMY);
+NCC2_TotalAnnualMinNewCapacityConstraint(y,a,r)$(TotalAnnualMinCapacityInvestment(r,a,y) > 0).. NewCapacity(y,a,r) =g= TotalAnnualMinCapacityInvestment(r,a,y);
 *
 * ################ Annual Activity Constraints ##############
 *
-*s.t. AAC1_TotalAnnualTechnologyActivity(YEAR,TECHNOLOGY,ECONOMY): sum(TIMESLICE) RateOfTotalActivity[y,l,t,r]*YearSplit[y,l] = TotalTechnologyAnnualActivity[y,t,r];
-equation AAC1_TotalAnnualTechnologyActivity(YEAR2,TECHNOLOGY,ECONOMY);
-AAC1_TotalAnnualTechnologyActivity(y,t,r).. sum(l, (RateOfTotalActivity(y,l,t,r)*YearSplit(l,y))) =e= TotalTechnologyAnnualActivity(y,t,r);
-*s.t. AAC2_TotalAnnualTechnologyActivityUpperLimit(YEAR,TECHNOLOGY,ECONOMY:TotalTechnologyAnnualActivityUpperLimit[y,t,r]<9999): TotalTechnologyAnnualActivity[y,t,r] <= TotalTechnologyAnnualActivityUpperLimit[y,t,r] ;
-equation AAC2_TotalAnnualTechnologyActivityUpperLimit(YEAR2,TECHNOLOGY,ECONOMY);
-AAC2_TotalAnnualTechnologyActivityUpperLimit(y,t,r)$(TotalTechnologyAnnualActivityUpperLimit(r,t,y) <9999).. TotalTechnologyAnnualActivity(y,t,r) =l= TotalTechnologyAnnualActivityUpperLimit(r,t,y);
-*s.t. AAC3_TotalAnnualTechnologyActivityLowerLimit(YEAR,TECHNOLOGY,ECONOMY: TotalTechnologyAnnualActivityLowerLimit[y,t,r]>0): TotalTechnologyAnnualActivity[y,t,r] >= TotalTechnologyAnnualActivityLowerLimit[y,t,r] ;
-equation AAC3_TotalAnnualTechnologyActivityLowerLimit(YEAR2,TECHNOLOGY,ECONOMY);
-AAC3_TotalAnnualTechnologyActivityLowerLimit(y,t,r)$(TotalTechnologyAnnualActivityLowerLimit(r,t,y) > 0).. TotalTechnologyAnnualActivity(y,t,r) =g= TotalTechnologyAnnualActivityLowerLimit(r,t,y);
+equation AAC1_TotalAnnualTechnologyActivity(YEAR2,ACTIVITY,ECONOMY);
+AAC1_TotalAnnualTechnologyActivity(y,a,r).. sum(l, (RateOfTotalActivity(y,l,a,r)*YearSplit(l,y))) =e= TotalTechnologyAnnualActivity(y,a,r);
+
+equation AAC2_TotalAnnualTechnologyActivityUpperLimit(YEAR2,ACTIVITY,ECONOMY);
+AAC2_TotalAnnualTechnologyActivityUpperLimit(y,a,r)$(TotalTechnologyAnnualActivityUpperLimit(r,a,y) <9999).. TotalTechnologyAnnualActivity(y,a,r) =l= TotalTechnologyAnnualActivityUpperLimit(r,a,y);
+
+equation AAC3_TotalAnnualTechnologyActivityLowerLimit(YEAR2,ACTIVITY,ECONOMY);
+AAC3_TotalAnnualTechnologyActivityLowerLimit(y,a,r)$(TotalTechnologyAnnualActivityLowerLimit(r,a,y) > 0).. TotalTechnologyAnnualActivity(y,a,r) =g= TotalTechnologyAnnualActivityLowerLimit(r,a,y);
 *
 * ################ Total Activity Constraints ##############
 *
-*s.t. TAC1_TotalModelHorizenTechnologyActivity(TECHNOLOGY,ECONOMY): sum(YEAR) TotalTechnologyAnnualActivity[y,t,r] = TotalTechnologyModelPeriodActivity[t,r];
-equation TAC1_TotalModelHorizenTechnologyActivity(TECHNOLOGY,ECONOMY);
-TAC1_TotalModelHorizenTechnologyActivity(t,r).. sum(y, TotalTechnologyAnnualActivity(y,t,r)) =e= TotalTechnologyModelPeriodActivity(t,r);
-*s.t. TAC2_TotalModelHorizenTechnologyActivityUpperLimit(YEAR,TECHNOLOGY,ECONOMY:TotalTechnologyModelPeriodActivityUpperLimit[t,r]<9999): TotalTechnologyModelPeriodActivity[t,r] <= TotalTechnologyModelPeriodActivityUpperLimit[t,r] ;
-equation TAC2_TotalModelHorizenTechnologyActivityUpperLimit(YEAR2,TECHNOLOGY,ECONOMY);
-TAC2_TotalModelHorizenTechnologyActivityUpperLimit(y,t,r)$(TotalTechnologyModelPeriodActivityUpperLimit(r,t) < 9999).. TotalTechnologyModelPeriodActivity(t,r) =l= TotalTechnologyModelPeriodActivityUpperLimit(r,t);
-*s.t. TAC3_TotalModelHorizenTechnologyActivityLowerLimit(YEAR,TECHNOLOGY,ECONOMY: TotalTechnologyModelPeriodActivityLowerLimit[t,r]>0): TotalTechnologyModelPeriodActivity[t,r] >= TotalTechnologyModelPeriodActivityLowerLimit[t,r] ;
-equation TAC3_TotalModelHorizenTechnologyActivityLowerLimit(YEAR2,TECHNOLOGY,ECONOMY);
-TAC3_TotalModelHorizenTechnologyActivityLowerLimit(y,t,r)$(TotalTechnologyModelPeriodActivityLowerLimit(r,t) > 0).. TotalTechnologyModelPeriodActivity(t,r) =g= TotalTechnologyModelPeriodActivityLowerLimit(r,t);
+equation TAC1_TotalModelHorizenTechnologyActivity(ACTIVITY,ECONOMY);
+TAC1_TotalModelHorizenTechnologyActivity(a,r).. sum(y, TotalTechnologyAnnualActivity(y,a,r)) =e= TotalTechnologyModelPeriodActivity(a,r);
+
+equation TAC2_TotalModelHorizenTechnologyActivityUpperLimit(YEAR2,ACTIVITY,ECONOMY);
+TAC2_TotalModelHorizenTechnologyActivityUpperLimit(y,a,r)$(TotalTechnologyModelPeriodActivityUpperLimit(r,a) < 9999).. TotalTechnologyModelPeriodActivity(a,r) =l= TotalTechnologyModelPeriodActivityUpperLimit(r,a);
+
+equation TAC3_TotalModelHorizenTechnologyActivityLowerLimit(YEAR2,ACTIVITY,ECONOMY);
+TAC3_TotalModelHorizenTechnologyActivityLowerLimit(y,a,r)$(TotalTechnologyModelPeriodActivityLowerLimit(r,a) > 0).. TotalTechnologyModelPeriodActivity(a,r) =g= TotalTechnologyModelPeriodActivityLowerLimit(r,a);
 *
 * ############### Reserve Margin Constraint #############* NTS: Should change demand for production
 *
-*s.t. RM1_ReserveMargin_TechologiesIncluded_In_Activity_Units(YEAR,TIMESLICE,ECONOMY): sum (TECHNOLOGY) TotalCapacityAnnual[y,t,r] *ReserveMarginTagTechnology[y,t,r] * CapacityToActivityUnit[t,r] = TotalCapacityInReserveMargin[y,r];
 equation RM1_ReserveMargin_TechologiesIncluded_In_Activity_Units(YEAR2,TIMESLICE,ECONOMY);
-RM1_ReserveMargin_TechologiesIncluded_In_Activity_Units(y,l,r).. sum (t, (TotalCapacityAnnual(y,t,r) *ReserveMarginTagTechnology(r,t,y) * CapacityToActivityUnit(r,t))) =e= TotalCapacityInReserveMargin(r,y);
-*s.t. RM2_ReserveMargin_FuelsIncluded(YEAR,TIMESLICE,ECONOMY): sum (FUEL) RateOfProduction[y,l,f,r] * ReserveMarginTagFuel[y,f,r] = DemandNeedingReserveMargin[y,l,r];
+RM1_ReserveMargin_TechologiesIncluded_In_Activity_Units(y,l,r).. sum (a, (TotalCapacityAnnual(y,a,r) *ReserveMarginTagTechnology(r,a,y) * CapacityToActivityUnit(r,a))) =e= TotalCapacityInReserveMargin(r,y);
+
 equation RM2_ReserveMargin_FuelsIncluded(YEAR2,TIMESLICE,ECONOMY);
 RM2_ReserveMargin_FuelsIncluded(y,l,r).. sum (f, (RateOfProduction(y,l,f,r) * ReserveMarginTagFuel(r,f,y))) =e= DemandNeedingReserveMargin(y,l,r);
-*s.t. RM3_ReserveMargin_Constraint(YEAR,TIMESLICE,ECONOMY): DemandNeedingReserveMargin[y,l,r] * ReserveMargin[y,r] <= TotalCapacityInReserveMargin[y,r];
+
 equation RM3_ReserveMargin_Constraint(YEAR2,TIMESLICE,ECONOMY);
 RM3_ReserveMargin_Constraint(y,l,r).. DemandNeedingReserveMargin(y,l,r) * ReserveMargin(r,y) =l= TotalCapacityInReserveMargin(r,y);
 *
 * ############### RE Production Target #############* NTS: Should change demand for production
 *
-*s.t. RE1_FuelProductionByTechnologyAnnual(YEAR,TECHNOLOGY,FUEL,ECONOMY): sum(TIMESLICE) ProductionByTechnology[y,l,t,f,r] = ProductionByTechnologyAnnual[y,t,f,r];
-equation RE1_FuelProductionByTechnologyAnnual(YEAR2,TECHNOLOGY,FUEL,ECONOMY);
-RE1_FuelProductionByTechnologyAnnual(y,t,f,r).. sum(l, ProductionByTechnology(y,l,t,f,r)) =e= ProductionByTechnologyAnnual(y,t,f,r);
-*s.t. RE2_TechIncluded(YEAR,ECONOMY): sum(TECHNOLOGY,FUEL) ProductionByTechnologyAnnual[y,t,f,r]*RETagTechnology[y,t,r] = TotalREProductionAnnual[y,r];
+equation RE1_FuelProductionByTechnologyAnnual(YEAR2,ACTIVITY,FUEL,ECONOMY);
+RE1_FuelProductionByTechnologyAnnual(y,a,f,r).. sum(l, ProductionByTechnology(y,l,a,f,r)) =e= ProductionByTechnologyAnnual(y,a,f,r);
+
 equation RE2_TechIncluded(YEAR,ECONOMY);
-RE2_TechIncluded(y,r).. sum((t,f), (ProductionByTechnologyAnnual(y,t,f,r)*RETagTechnology(r,t,y))) =e= TotalREProductionAnnual(y,r);
-*s.t. RE3_FuelIncluded(YEAR,ECONOMY): sum(TIMESLICE,FUEL) RateOfDemand[y,l,f,r]*YearSplit[y,l]*RETagFuel[y,f,r] = RETotalDemandOfTargetFuelAnnual[y,r];
+RE2_TechIncluded(y,r).. sum((a,f), (ProductionByTechnologyAnnual(y,a,f,r)*RETagTechnology(r,a,y))) =e= TotalREProductionAnnual(y,r);
+
 equation RE3_FuelIncluded(YEAR2,ECONOMY);
 RE3_FuelIncluded(y,r).. sum((l,f), (RateOfDemand(y,l,f,r)*YearSplit(l,y)*RETagFuel(r,f,y))) =e= RETotalDemandOfTargetFuelAnnual(y,r);
-*s.t. RE4_EnergyConstraint(YEAR,ECONOMY):REMinProductionTarget[y,r]*RETotalDemandOfTargetFuelAnnual[y,r] <= TotalREProductionAnnual[y,r];
+
 equation RE4_EnergyConstraint(YEAR2,ECONOMY);
 RE4_EnergyConstraint(y,r).. REMinProductionTarget(r,y)*RETotalDemandOfTargetFuelAnnual(y,r) =l= TotalREProductionAnnual(y,r);
-*s.t. RE5_FuelUseByTechnologyAnnual(YEAR,TECHNOLOGY,FUEL,ECONOMY): sum(TIMESLICE) RateOfUseByTechnology[y,l,t,f,r]*YearSplit[y,l] = UseByTechnologyAnnual[y,t,f,r];
-equation RE5_FuelUseByTechnologyAnnual(YEAR2,TECHNOLOGY,FUEL,ECONOMY);
-RE5_FuelUseByTechnologyAnnual(y,t,f,r).. sum(l, (RateOfUseByTechnology(y,l,t,f,r)*YearSplit(l,y))) =e= UseByTechnologyAnnual(y,t,f,r);
+
+equation RE5_FuelUseByTechnologyAnnual(YEAR2,ACTIVITY,FUEL,ECONOMY);
+RE5_FuelUseByTechnologyAnnual(y,a,f,r).. sum(l, (RateOfUseByTechnology(y,l,a,f,r)*YearSplit(l,y))) =e= UseByTechnologyAnnual(y,a,f,r);
 *
 * ################ Emissions Accounting ##############
 *
-*s.t. E1_AnnualEmissionProductionByMode(YEAR,TECHNOLOGY,EMISSION,MODE_OF_OPERATION,ECONOMY:EmissionActivityRatio[y,t,e,m,r]<>0): EmissionActivityRatio[y,t,e,m,r]*TotalAnnualTechnologyActivityByMode[y,t,m,r]=AnnualTechnologyEmissionByMode[y,t,e,m,r];
-equation E1_AnnualEmissionProductionByMode(YEAR2,TECHNOLOGY,EMISSION,MODE_OF_OPERATION,ECONOMY);
-* E1_AnnualEmissionProductionByMode(y,t,e,m,r)$(EmissionActivityRatio(r,t,e,m,y) <> 0).. EmissionActivityRatio(r,t,e,m,y)*TotalAnnualTechnologyActivityByMode(y,t,m,r) =e= AnnualTechnologyEmissionByMode(y,t,e,m,r);
-E1_AnnualEmissionProductionByMode(y,t,ghg,m,r).. EmissionActivityRatio(r,t,ghg,m,y)*TotalAnnualTechnologyActivityByMode(y,t,m,r) =e= AnnualTechnologyEmissionByMode(y,t,ghg,m,r);
-*s.t. E2_AnnualEmissionProduction(YEAR,TECHNOLOGY,EMISSION,ECONOMY): sum(MODE_OF_OPERATION) AnnualTechnologyEmissionByMode[y,t,e,m,r] = AnnualTechnologyEmission[y,t,e,r];
-equation E2_AnnualEmissionProduction(YEAR2,TECHNOLOGY,EMISSION,ECONOMY);
-E2_AnnualEmissionProduction(y,t,ghg,r).. sum(m, AnnualTechnologyEmissionByMode(y,t,ghg,m,r)) =e= AnnualTechnologyEmission(y,t,ghg,r);
-*s.t. E3_EmissionsPenaltyByTechAndEmission(YEAR,TECHNOLOGY,EMISSION,ECONOMY): AnnualTechnologyEmission[y,t,e,r]*EmissionsPenalty[y,e,r] = AnnualTechnologyEmissionPenaltyByEmission[y,t,e,r];
-equation E3_EmissionsPenaltyByTechAndEmission(YEAR2,TECHNOLOGY,EMISSION,ECONOMY);
-E3_EmissionsPenaltyByTechAndEmission(y,t,ghg,r).. AnnualTechnologyEmission(y,t,ghg,r)*EmissionsPenalty(r,ghg,y) =e= AnnualTechnologyEmissionPenaltyByEmission(y,t,ghg,r);
-*s.t. E4_EmissionsPenaltyByTechnology(YEAR,TECHNOLOGY,ECONOMY): sum(EMISSION) AnnualTechnologyEmissionPenaltyByEmission[y,t,e,r] = AnnualTechnologyEmissionsPenalty[y,t,r];
-equation E4_EmissionsPenaltyByTechnology(YEAR2,TECHNOLOGY,ECONOMY);
-E4_EmissionsPenaltyByTechnology(y,t,r).. sum(ghg, AnnualTechnologyEmissionPenaltyByEmission(y,t,ghg,r)) =e= AnnualTechnologyEmissionsPenalty(y,t,r);
-*s.t. E5_DiscountedEmissionsPenaltyByTechnology(YEAR,TECHNOLOGY,ECONOMY): AnnualTechnologyEmissionsPenalty[y,t,r]/((1+DiscountRate[t,r])^(y-min(yy in YEAR) min(yy)+0.5)) = DiscountedTechnologyEmissionsPenalty[y,t,r];
-equation E5_DiscountedEmissionsPenaltyByTechnology(YEAR2,TECHNOLOGY,ECONOMY);
-E5_DiscountedEmissionsPenaltyByTechnology(y,t,r).. AnnualTechnologyEmissionsPenalty(y,t,r)/((1+DiscountRate(r,t))**(YearVal(y)-smin(yy, YearVal(yy))+0.5)) =e= DiscountedTechnologyEmissionsPenalty(y,t,r);
-*s.t. E6_EmissionsAccounting1(YEAR,EMISSION,ECONOMY): sum(TECHNOLOGY) AnnualTechnologyEmission[y,t,e,r] = AnnualEmissions[y,e,r];
+equation E1_AnnualEmissionProductionByMode(YEAR2,ACTIVITY,EMISSION,MODE_OF_OPERATION,ECONOMY);
+E1_AnnualEmissionProductionByMode(y,a,ghg,m,r).. EmissionActivityRatio(r,a,ghg,m,y)*TotalAnnualTechnologyActivityByMode(y,a,m,r) =e= AnnualTechnologyEmissionByMode(y,a,ghg,m,r);
+
+equation E2_AnnualEmissionProduction(YEAR2,ACTIVITY,EMISSION,ECONOMY);
+E2_AnnualEmissionProduction(y,a,ghg,r).. sum(m, AnnualTechnologyEmissionByMode(y,a,ghg,m,r)) =e= AnnualTechnologyEmission(y,a,ghg,r);
+
+equation E3_EmissionsPenaltyByTechAndEmission(YEAR2,ACTIVITY,EMISSION,ECONOMY);
+E3_EmissionsPenaltyByTechAndEmission(y,a,ghg,r).. AnnualTechnologyEmission(y,a,ghg,r)*EmissionsPenalty(r,ghg,y) =e= AnnualTechnologyEmissionPenaltyByEmission(y,a,ghg,r);
+
+equation E4_EmissionsPenaltyByTechnology(YEAR2,ACTIVITY,ECONOMY);
+E4_EmissionsPenaltyByTechnology(y,a,r).. sum(ghg, AnnualTechnologyEmissionPenaltyByEmission(y,a,ghg,r)) =e= AnnualTechnologyEmissionsPenalty(y,a,r);
+
+equation E5_DiscountedEmissionsPenaltyByTechnology(YEAR2,ACTIVITY,ECONOMY);
+E5_DiscountedEmissionsPenaltyByTechnology(y,a,r).. AnnualTechnologyEmissionsPenalty(y,a,r)/((1+DiscountRate(r,a))**(YearVal(y)-smin(yy, YearVal(yy))+0.5)) =e= DiscountedTechnologyEmissionsPenalty(y,a,r);
+
 equation E6_EmissionsAccounting1(YEAR2,EMISSION,ECONOMY);
-E6_EmissionsAccounting1(y,ghg,r).. sum(t, AnnualTechnologyEmission(y,t,ghg,r)) =e= AnnualEmissions(y,ghg,r);
-*s.t. E7_EmissionsAccounting2(EMISSION,ECONOMY): sum(YEAR) AnnualEmissions[y,e,r] = ModelPeriodEmissions[e,r]- ModelPeriodExogenousEmission[e,r];
+E6_EmissionsAccounting1(y,ghg,r).. sum(a, AnnualTechnologyEmission(y,a,ghg,r)) =e= AnnualEmissions(y,ghg,r);
+
 equation E7_EmissionsAccounting2(EMISSION,ECONOMY);
 E7_EmissionsAccounting2(ghg,r).. sum(y, AnnualEmissions(y,ghg,r)) =e= ModelPeriodEmissions(ghg,r)- ModelPeriodExogenousEmission(r,ghg);
-*s.t. E8_AnnualEmissionsLimit(YEAR,EMISSION,ECONOMY): AnnualEmissions[y,e,r]+AnnualExogenousEmission[y,e,r] <= AnnualEmissionLimit[y,e,r];
+
 equation E8_AnnualEmissionsLimit(YEAR2,EMISSION,ECONOMY);
 E8_AnnualEmissionsLimit(y,ghg,r).. AnnualEmissions(y,ghg,r)+AnnualExogenousEmission(r,ghg,y) =l= AnnualEmissionLimit(r,ghg,y);
-*s.t. E9_ModelPeriodEmissionsLimit(EMISSION,ECONOMY): ModelPeriodEmissions[e,r] <= ModelPeriodEmissionLimit[e,r] ;
+
 equation E9_ModelPeriodEmissionsLimit(EMISSION,ECONOMY);
 E9_ModelPeriodEmissionsLimit(ghg,r).. ModelPeriodEmissions(ghg,r) =l= ModelPeriodEmissionLimit(r,ghg);
 *

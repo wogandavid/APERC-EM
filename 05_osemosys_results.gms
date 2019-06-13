@@ -38,42 +38,42 @@ loop(y, put Production.L(y,l,f,r));
 );
 put /;
 * Total Annual Capacity (by ECONOMY, technology, year)
-loop((r,t),
-put / "TotalAnnualCapacity",r.TL,t.TL;
-loop(y, put TotalCapacityAnnual.L(y,t,r));
+loop((r,a),
+put / "TotalAnnualCapacity",r.TL,a.TL;
+loop(y, put TotalCapacityAnnual.L(y,a,r));
 );
 put /;
 * New Annual Capacity (by ECONOMY, technology, year)
-loop((r,t),
-put / "NewAnnualCapacity",r.TL,t.TL;
-loop(y, put NewCapacity.L(y,t,r));
+loop((r,a),
+put / "NewAnnualCapacity",r.TL,a.TL;
+loop(y, put NewCapacity.L(y,a,r));
 );
 put /;
 * Annual Technology Production (by ECONOMY, technology, fuel, year)
-loop((r,t,f)$(sum((y,m), OutputActivityRatio(r,t,f,m,y)) > 0),
-put / "AnnualProductionByTechnology",r.TL,t.TL,f.TL;
-loop(y, put ProductionByTechnologyAnnual.L(y,t,f,r));
+loop((r,a,f)$(sum((y,m), OutputActivityRatio(r,a,f,m,y)) > 0),
+put / "AnnualProductionByTechnology",r.TL,a.TL,f.TL;
+loop(y, put ProductionByTechnologyAnnual.L(y,a,f,r));
 );
 put /;
 * Annual Technology Use (by ECONOMY, technology, fuel, year)
-loop((r,t,f)$(sum((y,m), InputActivityRatio(r,t,f,m,y)) > 0),
-put / "AnnualUseByTechnology",r.TL,t.TL,f.TL;
-loop(y, put UseByTechnologyAnnual.L(y,t,f,r));
+loop((r,a,f)$(sum((y,m), InputActivityRatio(r,a,f,m,y)) > 0),
+put / "AnnualUseByTechnology",r.TL,a.TL,f.TL;
+loop(y, put UseByTechnologyAnnual.L(y,a,f,r));
 );
 put /;
 * Technology Production in each TimeSlice (by ECONOMY, technology, fuel, timeslice, year)
-loop((r,t,f)$(sum((y,m), OutputActivityRatio(r,t,f,m,y)) > 0),
+loop((r,a,f)$(sum((y,m), OutputActivityRatio(r,a,f,m,y)) > 0),
 loop(l,
-put / "ProductionByTechnologyByTimeSlice",r.TL,t.TL,f.TL,l.TL;
-loop(y, put ProductionByTechnology.L(y,l,t,f,r));
+put / "ProductionByTechnologyByTimeSlice",r.TL,a.TL,f.TL,l.TL;
+loop(y, put ProductionByTechnology.L(y,l,a,f,r));
 );
 );
 put /;
 * Technology Use in each TimeSlice (by ECONOMY, technology, fuel, timeslice, year)
-loop((r,t,f)$(sum((y,m), InputActivityRatio(r,t,f,m,y)) > 0),
+loop((r,a,f)$(sum((y,m), InputActivityRatio(r,a,f,m,y)) > 0),
 loop(l,
-put / "UseByTechnologyByTimeSlice",r.TL,t.TL,f.TL,l.TL;
-loop(y, put UseByTechnology.L(y,l,t,f,r));
+put / "UseByTechnologyByTimeSlice",r.TL,a.TL,f.TL,l.TL;
+loop(y, put UseByTechnology.L(y,l,a,f,r));
 );
 );
 put /;
@@ -84,9 +84,9 @@ loop(y, put AnnualEmissions.L(y,ghg,r));
 );
 put /;
 * Annual Emissions (by ECONOMY, technology, emission, year)
-loop((r,t,ghg)$(sum((y,m), EmissionActivityRatio(r,t,ghg,m,y)) > 0),
-put / "AnnualEmissionsByTechnology",r.TL,t.TL,ghg.TL;
-loop(y, put AnnualTechnologyEmission.L(y,t,ghg,r));
+loop((r,a,ghg)$(sum((y,m), EmissionActivityRatio(r,a,ghg,m,y)) > 0),
+put / "AnnualEmissionsByTechnology",r.TL,a.TL,ghg.TL;
+loop(y, put AnnualTechnologyEmission.L(y,a,ghg,r));
 );
 put /;
 PUTCLOSE ANT;

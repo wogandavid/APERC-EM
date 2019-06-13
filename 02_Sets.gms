@@ -93,8 +93,8 @@ TRNu "backstop vehicle technology"
 * 8. Agriculture
 *AGR_tech
 
-* aggregate all sector sets into one TECHNOLOGY set to match OSeMOSYS structure
-set TECHNOLOGY a list of all processes and activities
+* aggregate all sector sets into one ACTIVITY set to match OSeMOSYS structure
+set ACTIVITY a list of all processes and activities
 /set.PRD_tech, set.REF_tech, set.POW_tech, set.BLD_tech, set.TRN_tech/
 ;
 
@@ -118,7 +118,7 @@ TRN_fuel /TRN/
 *AGR_fuel //
 * Other fuels
 OTH_fuel /DUMMYF/
-* aggregate all sector sets into one TECHNOLOGY set to match OSeMOSYS structure
+* aggregate all sector sets into one ACTIVITY set to match OSeMOSYS structure
 FUEL a list of all fuels and flows
 /set.PRD_fuel,REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
 *IND_fuel,
