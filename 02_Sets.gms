@@ -41,42 +41,43 @@ Sets
 * Production sector
 PRD_tech "production sector technologies"
 /
-IMPCOAL1 "import coal"
-IMPOIL1 "import oil"
-IMPNATGAS "import gas"
-IMPURANIUM1 "import uranium"
-IMPDSL1 "import diesel fuel"
-IMPGSL1 "import gasoline"
+PRDimpcoal1 "import coal"
+PRDimpoil1 "import oil"
+PRDimpnatgas "import gas"
+PRDimpuranium1 "import uranium"
+PRDimpdiesel "import diesel fuel"
+PRDimpgsl "import gasoline"
 /
 * Refining sector
 REF_tech "refining sector technologies"
 /
-SRE "refining activity"
+REFprocess1 "refining activity"
 /
 * Power sector
 POW_tech
 /
 * power plants
- ELCOAL "coal power plant"
- ELNUKE "nuclear power plant"
- ELNATGAS "natural gas power plant"
- ELHYD "hydro power plant"
- ELDAM "storage"
- RIV "produces water for power plant"
+ POWcoal "coal power plant"
+ POWnuke "nuclear power plant"
+ POWnatgas "natural gas power plant"
+ POWhyd "hydro power plant"
+ POWdam "storage"
+ POWriv "produces water for power plant"
 * transmission
- HVTexp "export to high voltage activity"
- HVTimp "import from high voltage activity"
- HVTu "backstop transmission technology"
+ POWHVTexp "export to high voltage activity"
+ POWHVTimp "import from high voltage activity"
+ POWHVTu "backstop transmission technology"
 /
 * Hydrogen 'sector'
+
 * Buildings
 BLD_tech
 /
-RHO "residential heating - oil"
-RHE "residential heating - electricity"
-RL1 "residential lighting - technology "
-RHu - "backstop technology for heating"
-RLu - "backstop technology for lighting"
+BLDrho "residential heating - oil"
+BLDrhe "residential heating - electricity"
+BLDrl "residential lighting - technology "
+BLDrhu - "backstop technology for heating"
+BLDrlu - "backstop technology for lighting"
 /
 * Transport
 TRN_tech
@@ -88,8 +89,10 @@ TRNu "backstop vehicle technology"
 /
 * 7. Industry
 *IND_tech
+
 * 8. Agriculture
 *AGR_tech
+
 * aggregate all sector sets into one TECHNOLOGY set to match OSeMOSYS structure
 set TECHNOLOGY a list of all processes and activities
 /set.PRD_tech, set.REF_tech, set.POW_tech, set.BLD_tech, set.TRN_tech/
@@ -97,6 +100,7 @@ set TECHNOLOGY a list of all processes and activities
 
 * ===============================================================================
 * FUELS
+* Note: update with codes from 'layout file'
 Sets
 * Production sector
 PRD_fuel /URANIUM, COAL, OIL, NATGAS, HYD/
