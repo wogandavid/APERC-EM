@@ -60,6 +60,7 @@ execute_load "sector_data.gdx",
 
 * ## END OF EXCEL CALLS
 * ## Parameters not in Excel file
+* You can add these to the Excel file using the syntax above
 
 AnnualExogenousEmission(r,ghg,y) = 0;
 AnnualEmissionLimit(r,ghg,y) = 9999;
@@ -78,12 +79,12 @@ DiscountRate(r,a) = 0.05;
 *display DiscountRate;
 
 parameter TechnologyToStorage /
-  AUS.POWDAM.DAM.2  1
+  01_AUS.POWDAM.DAM.2  1
 /;
 *display TechnologyToStorage;
 
 parameter TechnologyFromStorage /
-  AUS.POWDAM.DAM.1  1
+  01_AUS.POWDAM.DAM.1  1
 /;
 
 VariableCost(r,a,m,y)$(VariableCost(r,a,m,y) = 0) = 0.00041868;
@@ -99,12 +100,12 @@ CapacityToActivityUnit(r,a)$(CapacityToActivityUnit(r,a) = 0) = 1;
 *display CapacityToActivityUnit;
 
 parameter TechWithCapacityNeededToMeetPeakTS /
-  AUS.POWCOAL    1
-  AUS.POWNUKE    1
-  AUS.POWNATGAS  1
-  AUS.POWHYD     1
-  AUS.POWDAM     1
-  ROW.POWCOAL    0
+  01_AUS.POWCOAL    1
+  01_AUS.POWNUKE    1
+  01_AUS.POWNATGAS  1
+  01_AUS.POWHYD     1
+  01_AUS.POWDAM     1
+  27_WOR.POWCOAL    0
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 
@@ -112,10 +113,10 @@ EmissionsPenalty(r,ghg,y) = eps;
 *display EmissionsPenalty;
 
 parameter ReserveMarginTagFuel /
-  AUS.ELC.2016  1
-  AUS.ELC.2017  1
-  ROW.ELC.2016  1
-  ROW.ELC.2017  1
+  01_AUS.ELC.2016  1
+  01_AUS.ELC.2017  1
+  27_WOR.ELC.2016  1
+  27_WOR.ELC.2017  1
 /;
 *display ReserveMarginTagFuel;
 

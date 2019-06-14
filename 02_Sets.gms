@@ -13,7 +13,7 @@
 * GLOBAL
 
 * list of economies in model
-set ECONOMY  /AUS, ROW/;
+set ECONOMY  /01_AUS, 27_WOR/;
 
 * list of years in data
 set YEAR /2016*2028/;
@@ -36,7 +36,8 @@ set STORAGE / DAM /;
 set BOUNDARY_INSTANCES  / endc1 /;
 
 * ===============================================================================
-* TECHNOLOGIES
+* ACTIVITIES
+* 'Activites' are processes like energy transformation technologies, importing or exporting 'Flows'.
 Sets
 * Production sector
 PRD_tech "production sector technologies"
@@ -99,7 +100,9 @@ set ACTIVITY a list of all processes and activities
 ;
 
 * ===============================================================================
-* FUELS
+* FLOWS
+* 'Flows' are: demands, fuel consumption, something produced by a activity (process). In other words
+*  a flow is something that is received as an input or produced as an output by an activity.
 * Note: update with codes from 'layout file'
 Sets
 * Production sector
