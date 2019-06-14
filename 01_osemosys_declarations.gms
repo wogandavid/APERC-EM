@@ -1,6 +1,8 @@
 * OSEMOSYS 2011.07.07 conversion to GAMS by Ken Noble, Noble-Soft Systems - August 2012
 *
 * Trade additions by David Wogan, APERC - Jan 2019
+
+* THIS IS A TEST MODIFICATION
 *
 * OSEMOSYS 2011.07.07
 * Open Source energy Modeling SYStem
