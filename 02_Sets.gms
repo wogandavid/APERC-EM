@@ -13,8 +13,36 @@
 * GLOBAL
 
 * list of economies in model
-set ECONOMY  /01_AUS, 27_WOR/;
-
+set ECONOMY economies /
+01_AUS
+02_BD
+03_CDA
+04_CHL
+05_PRC
+06_HKC
+07_INA
+08_JPN
+09_ROK
+10_MAS
+11_MEX
+12_NZ
+13_PNG
+14_PE
+15_RP
+16_RUS
+17_SIN
+18_CT
+19_THA
+20_USA
+21_VN
+22_SEA
+23_NEA
+24_OAM
+25_OCE
+26_ROW
+27_WOR
+/
+;
 * list of years in data
 set YEAR /2016*2028/;
 * list of years to run model
@@ -95,7 +123,7 @@ TRNu "backstop vehicle technology"
 *AGR_tech
 
 * aggregate all sector sets into one ACTIVITY set to match OSeMOSYS structure
-set ACTIVITY a list of all processes and activities
+set ACTIVITY aggregate all activities for OSeMOSYS
 /set.PRD_tech, set.REF_tech, set.POW_tech, set.BLD_tech, set.TRN_tech/
 ;
 
@@ -122,7 +150,7 @@ TRN_fuel /TRN/
 * Other fuels
 OTH_fuel /DUMMYF/
 * aggregate all sector sets into one ACTIVITY set to match OSeMOSYS structure
-FLOW a list of all fuels and flows
+FLOW aggregate and flows for OSeMOSYS
 /set.PRD_fuel,REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
 *IND_fuel,
 *AGR_fuel,OTH_fuel
