@@ -22,8 +22,6 @@ set ECONOMY economies /
 19_THA
 20_USA
 21_VN
-27_WOR
-8_OPEC
 /
 ;
 
@@ -41,7 +39,7 @@ $offecho
 $call gdxxrw.exe 7th_steel.xlsx@7th_steel.txt
 $gdxin 7th_steel.gdx
 
-parameters
+parameters 
 FLG(ECONOMY,yt),
 DAT(*,ECONOMY,y1),
 REG(*,y1),
