@@ -1,30 +1,4 @@
 * New Steel sector demand model
-
-set ECONOMY economies /
-01_AUS
-02_BD
-03_CDA
-04_CHL
-05_PRC
-06_HKC
-07_INA
-08_JPN
-09_ROK
-10_MAS
-11_MEX
-12_NZ
-13_PNG
-14_PE
-15_RP
-16_RUS
-17_SIN
-18_CT
-19_THA
-20_USA
-21_VN
-/
-;
-
 Set yt year type /yr1,yr2,yr3,yr4,yr5/;
 Set y1 /1980*2016/;
 Set y2(y1) /1987*2016/;
@@ -32,22 +6,70 @@ Set y3(y1) /1992*2016/;
 Set y4(y1) /1980*2016/;
 Set y5(y1) /1992*2016/;
 
+set ECONOMY economies /
+    01_AUS
+    02_BD
+    03_CDA
+    04_CHL
+    05_PRC
+    06_HKC
+    07_INA
+    08_JPN
+    09_ROK
+    10_MAS
+    11_MEX
+    12_NZ
+    13_PNG
+    14_PE
+    15_RP
+    16_RUS
+    17_SIN
+    18_CT
+    19_THA
+    20_USA
+    21_VN
+/
+;
+
+table FLG_steel(ECONOMY,yt)
+            yr1 yr2 yr3 yr4 yr5
+    01_AUS  1
+    02_BD   
+    03_CDA  1
+    04_CHL  1
+    05_PRC  1
+    06_HKC  1
+    07_INA                  1
+    08_JPN  1
+    09_ROK                  1
+    10_MAS                  1
+    11_MEX                  1
+    12_NZ               1
+    13_PNG                  1
+    14_PE               1
+    15_RP               1
+    16_RUS                  1
+    17_SIN  1
+    18_CT           3
+    19_THA              1
+    20_USA  1
+    21_VN                   1
+;
+
 $onecho > 7th_steel.txt
-par=FLG    rng=flag!B1 rdim=1 cdim=1
 par=DAT    rng=data!C1 rdim=2 cdim=1
 $offecho
 $call gdxxrw.exe 7th_steel.xlsx@7th_steel.txt
 $gdxin 7th_steel.gdx
 
 parameters 
-FLG(ECONOMY,yt),
 DAT(*,ECONOMY,y1),
 REG(*,y1),
 RST(ECONOMY,*);
-$Load FLG DAT
+$Load DAT
 $gdxin
 
-display FLG;
+display FLG_steel;
 
 RST(ECONOMY,'k')=eps;
 RST(ECONOMY,'c1')=eps;
@@ -115,7 +137,7 @@ Model  LS_y5 /obj,fit_y5/;
 display yt;
 
 Loop((ECONOMY,yt),
-        If(FLG(ECONOMY,yt)=1,
+        If(FLG_steel(ECONOMY,yt)=1,
          REG('DUM1',y1) = DAT('DUM1',ECONOMY,y1);
          REG('DUM2',y1) = DAT('DUM2',ECONOMY,y1);
          REG('GDP/POP',y1)   = DAT('GDP',ECONOMY,y1)/DAT('POP',ECONOMY,y1);
