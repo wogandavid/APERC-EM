@@ -10,6 +10,6 @@
 *.gdx
 *.vscode
 *.gpr
-*.xlsx
+.xlsx
 SelResults.csv
 task1.txt
