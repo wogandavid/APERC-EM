@@ -43,10 +43,15 @@ set ECONOMY economies /
 27_WOR
 /
 ;
+
+* economies to run in the model
+set ECONOMYrun /01_AUS/;
+
 * list of years in data
 set YEAR /2016*2028/;
 * list of years to run model
-SET year2 /2016*2018/;
+
+set year2 /2016*2018/;
 YearVal(YEAR2) = 2016+ord(YEAR2)-1;
 parameter StartYear / 2016 /;
 
