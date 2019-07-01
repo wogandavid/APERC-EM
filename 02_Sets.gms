@@ -156,7 +156,7 @@ TRN_fuel /TRN/
 OTH_fuel /DUMMYF/
 * aggregate all sector sets into one ACTIVITY set to match OSeMOSYS structure
 FLOW aggregate and flows for OSeMOSYS
-/set.PRD_fuel,REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
+/set.PRD_fuel,set.REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
 *IND_fuel,
 *AGR_fuel,OTH_fuel
 /
