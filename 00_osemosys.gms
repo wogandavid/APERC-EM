@@ -22,7 +22,7 @@ $include 02_sets.gms
 
 * Import data
 * Note: when you build your sector:
-* 1. rename the file to sectornumber_name_data.gms
+* 1. rename the file to sector number_name_data.gms
 * 2. move the data file to your sector folder
 * 3. change the $include statement to your folder.
 $include 03_sector_data_import.gms
@@ -35,9 +35,9 @@ $include 04_osemosys_equations.gms
 *
 * solve the model
 option LP=cbc;
-model osemosys /all/;
+model power /all/;
 option limrow=1e4, limcol=1e4, solprint=on, savepoint=2;
-solve osemosys minimizing z using LP;
+solve power minimizing z using LP;
 *
 * create results in file SelResults.CSV
 $include 05_osemosys_results.gms

@@ -31,8 +31,8 @@ $onecho > task1.txt
   par=TotalTechnologyAnnualActivityUpperLimit rng=TotalTechnologyAnnualActivityUp! Rdim=3
 $offecho
 
-$call GDXXRW C:\Users\david\OneDrive\Documents\GitHub\APERC-EM\sector_data.xlsx @task1.txt
-execute_load "sector_data.gdx",
+$call GDXXRW C:\Users\gigih.atmo\Documents\GitHub\APERC-EM\3_Power\power_data.xlsx @task1.txt
+execute_load "power_data.gdx",
   YearSplit
   AccumulatedAnnualDemand
   SpecifiedAnnualDemand
