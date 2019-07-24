@@ -100,12 +100,15 @@ CapacityToActivityUnit(r,a)$(CapacityToActivityUnit(r,a) = 0) = 1;
 *display CapacityToActivityUnit;
 
 parameter TechWithCapacityNeededToMeetPeakTS /
-  01_AUS.POWCOAL    1
+  01_AUS.POWcoal_con    1
+  01_AUS.POWcoal_adv    1
   01_AUS.POWNUKE    1
   01_AUS.POWNATGAS  1
   01_AUS.POWHYD     1
   01_AUS.POWDAM     1
-  27_WOR.POWCOAL    0
+  27_WOR.POWcoal_con    0
+  27_WOR.POWcoal_adv    0
+
 /;
 *display TechWithCapacityNeededToMeetPeakTS;
 

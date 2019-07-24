@@ -43,10 +43,15 @@ set ECONOMY economies /
 27_WOR
 /
 ;
+
+* economies to run in the model
+set ECONOMYrun /01_AUS/;
+
 * list of years in data
 set YEAR /2016*2028/;
 * list of years to run model
-SET year2 /2016*2018/;
+
+set year2 /2016*2018/;
 YearVal(YEAR2) = 2016+ord(YEAR2)-1;
 parameter StartYear / 2016 /;
 
@@ -86,7 +91,8 @@ REFprocess1 "refining activity"
 POW_tech
 /
 * power plants
- POWcoal "coal power plant"
+ POWcoal_con "coal subcritical power plant"
+ POWcoal_adv "coal advanced (super/ultra/IGCC) power plant"
  POWnuke "nuclear power plant"
  POWnatgas "natural gas power plant"
  POWhyd "hydro power plant"
@@ -151,7 +157,7 @@ TRN_fuel /TRN/
 OTH_fuel /DUMMYF/
 * aggregate all sector sets into one ACTIVITY set to match OSeMOSYS structure
 FLOW aggregate and flows for OSeMOSYS
-/set.PRD_fuel,REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
+/set.PRD_fuel,set.REF_fuel,set.POW_fuel,set.BLD_fuel,set.TRN_fuel
 *IND_fuel,
 *AGR_fuel,OTH_fuel
 /
